@@ -29,7 +29,7 @@ SIR SIR::evo(SIR &sir) const {
 };
 
 int main() {
-  SIR sir_{100, 2, 0, {0.8, 0.5}};
+  SIR sir_{100, 2, 0, {0.5, 0.3}};
   SIR &sir = sir_;
   SIR evo(sir);
   int s = sir.get_s();
