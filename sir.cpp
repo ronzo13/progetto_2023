@@ -1,11 +1,7 @@
 #include "sir.hpp"
 
-int SIR::evo_s(int &s_, int &i_, double &beta) {
-  const int N{sum()};
-  s_ = s_ - beta * (s_ / N) * i_;
-  return s_;
-};
+#include <iostream>
 
-int SIR::evo_i(){};
+SIR::SIR(int s, int i, int r) : s_{s}, i_{i}, r_{r} {}
 
-int SIR::evo_r(){};
+Evolve::Evolve(SIR &sir) : sir_{sir} {};

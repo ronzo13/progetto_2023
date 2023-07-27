@@ -6,24 +6,28 @@ struct Param {
   double gamma{};
 };
 
+//guardando anche lab7 credo sia meglio fare SIR come struct piuttosto che coma class
+//però mi serve qualche conferma magari sento Luca
+
 class SIR {
  private:
   int s_{};
   int i_{};
   int r_{};
+
+ public:
+  SIR(int, int, int);
+
+  int sum() const { return s_ + i_ + r_; };
+};
+
+class Evolve {
+ private:
+  SIR sir_;
   Param par_{};
 
  public:
-  SIR(int s, int i, int r, double beta, double gamma)
-      : s_{s}, i_{i}, r_{r}, par_{beta, gamma} {}
-
-  int sum() const { return s_ + i_ + r_; };
-
-  int evo_s(int &s, int &i, double &beta);
-
-  int evo_i();
-
-  int evo_r();
+  Evolve(SIR &);
 };
 
 #endif
