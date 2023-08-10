@@ -16,22 +16,21 @@ int SIR::get_i() const { return m_i; };
 
 int SIR::get_r() const { return m_r; };
 
-SIR SIR::evo(SIR &sir) const {
+void SIR::evolve() {
   int N = total();
 
-  for (int i{}; i < 100; ++i) {
-    sir.m_s = sir.m_s - sir.m_par.beta * (sir.m_s / N) * sir.m_i;
-    sir.m_i = sir.m_i + sir.m_par.beta * (sir.m_s / N) * sir.m_i -
-              sir.m_par.gamma * sir.m_i;
-    sir.m_r = sir.m_r + sir.m_par.gamma * sir.m_i;
-  }
-  return sir;
+  m_s = m_s - m_par.beta * (m_s / N) * m_i;
+  m_i = m_i + m_par.beta * (m_s / N) * m_i - m_par.gamma * m_i;
+  m_r = m_r + m_par.gamma * m_i;
 };
 
 int main() {
-  SIR sir_{100, 2, 0, {0.5, 0.3}};
-  SIR &sir = sir_;
-  SIR evo(sir);
+  SIR sir{100, 2, 0, {0.3, 0.2}};
+  sir.evolve();
+  sir.evolve();
+  sir.evolve();
+  sir.evolve();
+  sir.evolve();
   int s = sir.get_s();
   int i = sir.get_i();
   int r = sir.get_r();
