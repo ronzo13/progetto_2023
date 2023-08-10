@@ -8,13 +8,13 @@ struct Param {
 
 class SIR {
  private:
-  int m_s{};
-  int m_i{};
-  int m_r{};
+  double m_s{};
+  double m_i{};
+  double m_r{};
   Param m_par{};
 
  public:
-  SIR(int, int, int, Param);
+  SIR(double, double, double, Param);
 
   void evolve();
 
