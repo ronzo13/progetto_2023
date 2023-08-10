@@ -40,8 +40,9 @@ void SIR::evolve() {
   } else {
   };
 
-  // sum =static_cast<int>(sum);
-  // assert(N == sum);
+  sum = m_s + m_i + m_r;
+  sum = static_cast<int>(sum);
+  assert(N == sum);
 };
 
 int main() {
