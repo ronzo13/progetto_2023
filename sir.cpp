@@ -50,6 +50,7 @@ void SIR::evolve() {
 
   int_sum = static_cast<int>(m_s + m_i + m_r);
   assert(N == int_sum);
+
 };
 
 int main() {
