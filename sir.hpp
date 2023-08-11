@@ -16,7 +16,7 @@ class SIR {
  public:
   SIR(int, int, int, Param);
 
-  SIR evo(SIR &) const;
+  void evolve();
 
   int total() const;
 
