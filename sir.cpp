@@ -33,25 +33,32 @@ void SIR::evolve() {
 
   double sum{m_s + m_i + m_r};
 
-  if (N > sum) {
-    ++m_i;
-  } else if (N < sum) {
-    --m_s;
+  int int_sum = static_cast<int>(sum);
+
+  int diff{std::abs(N - int_sum)};
+
+  if (N > int_sum) {
+    for (int i{}; i < diff; ++i) {
+      ++m_i;
+    }
+  } else if (N < int_sum) {
+    for (int j{}; j < diff; ++j) {
+      --m_s;
+    }
   } else {
   };
 
-  sum = m_s + m_i + m_r;
-  sum = static_cast<int>(sum);
-  assert(N == sum);
+  int_sum = static_cast<int>(m_s + m_i + m_r);
+  assert(N == int_sum);
 };
 
 int main() {
-  SIR sir{98, 2, 0, {0.4, 0.2}};
+  SIR sir{95, 5, 0, {0.6, 0.3}};
   int s = sir.get_s();
   int i = sir.get_i();
   int r = sir.get_r();
   std::cout << "totale: " << sir.total() << '\n';
-  for (int j{}; j < 50; ++j) {
+  for (int j{}; j < 10; ++j) {
     sir.evolve();
     s = sir.get_s();
     i = sir.get_i();
