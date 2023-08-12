@@ -48,7 +48,7 @@ void SIR::evolve() {
   } else {
   };
 
-  int_sum = static_cast<int>(m_s + m_i + m_r);
+  int_sum = static_cast<int>(sum);
   assert(N == int_sum);
 
 };
