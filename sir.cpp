@@ -3,19 +3,19 @@
 #include <cassert>
 #include <cmath>
 #include <iostream>
-#include <numeric>
 #include <stdexcept>
 
 SIR::SIR(double s, double i, double r, Param par)
     : m_s{s}, m_i{i}, m_r{r}, m_par{par} {};
 
-bool SIR::check_state() const{
-  return (m_s >= 0 && m_i >=0 && m_r >= 0 && m_par.beta >= 0 && m_par.beta <= 1 && m_par.gamma >= 0 && m_par.gamma <= 1);
+bool SIR::check_state() const {
+  return (m_s >= 0 && m_i >= 0 && m_r >= 0 && m_par.beta >= 0 &&
+          m_par.beta <= 1 && m_par.gamma >= 0 && m_par.gamma <= 1);
 }
 
 int SIR::total() const {
   double total{m_s + m_i + m_r};
-  assert(total == round(total));
+  assert(total == std::round(total));
   int int_total = static_cast<int>(total);
   return int_total;
 };
@@ -27,7 +27,7 @@ int SIR::get_i() const { return m_i; };
 int SIR::get_r() const { return m_r; };
 
 void SIR::evolve() {
-  if(!SIR::check_state()){
+  if (!check_state()) {
     throw std::runtime_error{"Invalid data"};
   }
 
@@ -37,9 +37,9 @@ void SIR::evolve() {
   double i = m_i + m_par.beta * (m_s / N) * m_i - m_par.gamma * m_i;
   double r = m_r + m_par.gamma * m_i;
 
-  m_s = round(s);
-  m_i = round(i);
-  m_r = round(r);
+  m_s = std::round(s);
+  m_i = std::round(i);
+  m_r = std::round(r);
 
   double sum{m_s + m_i + m_r};
 
@@ -63,12 +63,16 @@ void SIR::evolve() {
 };
 
 int main() {
-  SIR sir{95, 5, 0, {0.6, 0.3}};
+  int durata{};
+  std::cout << "durata epidemia: ";
+  std::cin >> durata;
+  SIR sir{93, 7, 0, {0.7, 0.2}};
   int s = sir.get_s();
   int i = sir.get_i();
   int r = sir.get_r();
   std::cout << "totale: " << sir.total() << '\n';
-  for (int j{}; j < 10; ++j) {
+  std::cout << "------" << '\n';
+  for (int j{}; j < durata; ++j) {
     sir.evolve();
     s = sir.get_s();
     i = sir.get_i();
@@ -77,5 +81,6 @@ int main() {
     std::cout << "i: " << i << '\n';
     std::cout << "r: " << r << '\n';
     std::cout << "totale: " << sir.total() << '\n';
+    std::cout << "------" << '\n';
   }
 }
