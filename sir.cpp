@@ -4,9 +4,14 @@
 #include <cmath>
 #include <iostream>
 #include <numeric>
+#include <stdexcept>
 
 SIR::SIR(double s, double i, double r, Param par)
     : m_s{s}, m_i{i}, m_r{r}, m_par{par} {};
+
+bool SIR::check_state() const{
+  return (m_s >= 0 && m_i >=0 && m_r >= 0 && m_par.beta >= 0 && m_par.beta <= 1 && m_par.gamma >= 0 && m_par.gamma <= 1);
+}
 
 int SIR::total() const {
   double total{m_s + m_i + m_r};
@@ -22,6 +27,10 @@ int SIR::get_i() const { return m_i; };
 int SIR::get_r() const { return m_r; };
 
 void SIR::evolve() {
+  if(!SIR::check_state()){
+    throw std::runtime_error{"Invalid data"};
+  }
+
   const int N = total();
 
   double s = m_s - m_par.beta * (m_s / N) * m_i;
