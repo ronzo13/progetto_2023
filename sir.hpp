@@ -16,6 +16,8 @@ class SIR {
  public:
   SIR(double, double, double, Param);
 
+  bool check_state() const;
+
   void evolve();
 
   int total() const;
