@@ -11,7 +11,8 @@ SIR::SIR(double s, double i, double r, Param par)
 int SIR::total() const {
   double total{m_s + m_i + m_r};
   assert(total == round(total));
-  return total;
+  int int_total = static_cast<int>(total);
+  return int_total;
 };
 
 int SIR::get_s() const { return m_s; };
@@ -21,15 +22,15 @@ int SIR::get_i() const { return m_i; };
 int SIR::get_r() const { return m_r; };
 
 void SIR::evolve() {
-  int N = total();
+  const int N = total();
 
-  m_s = m_s - m_par.beta * (m_s / N) * m_i;
-  m_i = m_i + m_par.beta * (m_s / N) * m_i - m_par.gamma * m_i;
-  m_r = m_r + m_par.gamma * m_i;
+  double s = m_s - m_par.beta * (m_s / N) * m_i;
+  double i = m_i + m_par.beta * (m_s / N) * m_i - m_par.gamma * m_i;
+  double r = m_r + m_par.gamma * m_i;
 
-  m_s = round(m_s);
-  m_i = round(m_i);
-  m_r = round(m_r);
+  m_s = round(s);
+  m_i = round(i);
+  m_r = round(r);
 
   double sum{m_s + m_i + m_r};
 
@@ -67,5 +68,6 @@ int main() {
     std::cout << "i: " << i << '\n';
     std::cout << "r: " << r << '\n';
     std::cout << "totale: " << sir.total() << '\n';
+    std::cout << "------" << '\n';
   }
 }
