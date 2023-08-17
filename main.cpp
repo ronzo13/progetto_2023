@@ -9,9 +9,9 @@ int main() {
   std::cout << "gamma: ";
   std::cin >> param.gamma;
 
-  int new_s{};
-  int new_i{};
-  int new_r{};
+  double new_s{};
+  double new_i{};
+  double new_r{};
 
   std::cout << "s: ";
   std::cin >> new_s;
