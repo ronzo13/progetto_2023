@@ -5,7 +5,7 @@
 #include <iostream>
 #include <stdexcept>
 
-SIR::SIR(double s, double i, double r, Param par)
+SIR::SIR(double s, double i, double r, Param const& par)
     : m_s{s}, m_i{i}, m_r{r}, m_par{par} {};
 
 bool SIR::check_state() const {
@@ -27,11 +27,11 @@ int SIR::get_i() const { return m_i; };
 int SIR::get_r() const { return m_r; };
 
 void SIR::evolve() {
-  if (!check_state()) {
+  if (!SIR::check_state()) {
     throw std::runtime_error{"Invalid data"};
   }
 
-  const int N = total();
+  const int N = SIR::total();
 
   double s = m_s - m_par.beta * (m_s / N) * m_i;
   double i = m_i + m_par.beta * (m_s / N) * m_i - m_par.gamma * m_i;

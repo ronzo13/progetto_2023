@@ -23,10 +23,10 @@ int main() {
   SIR sir{new_s, new_i, new_r, param};
 
   int days{};
-  std::cout << "durata epidemia: ";
+  std::cout << "epidemic duration: ";
   std::cin >> days;
 
-  std::cout << "totale: " << sir.total() << '\n';
+  std::cout << "total: " << sir.total() << '\n';
   std::cout << "------" << '\n';
   for (int j{}; j < days; ++j) {
     sir.evolve();
@@ -36,7 +36,7 @@ int main() {
     std::cout << "s: " << s << '\n';
     std::cout << "i: " << i << '\n';
     std::cout << "r: " << r << '\n';
-    std::cout << "totale: " << sir.total() << '\n';
+    std::cout << "total: " << sir.total() << '\n';
     std::cout << "------" << '\n';
   }
 }

@@ -14,7 +14,7 @@ class SIR {
   Param m_par{};
 
  public:
-  SIR(double, double, double, Param);
+  SIR(double, double, double, Param const&);
 
   bool check_state() const;
 
