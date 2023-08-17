@@ -5,71 +5,59 @@
 #include <iostream>
 #include <stdexcept>
 
-Status::Status(Param par, SIR sir, int days)
-    : m_par{par}, m_sir{sir}, m_days{days} {};
+SIR::SIR(double s, double i, double r, Param par)
+    : m_s{s}, m_i{i}, m_r{r}, m_par{par} {};
 
-bool Status::check_state() const {
-  return (m_sir.s >= 0 && m_sir.i >= 0 && m_sir.i >= 0 && m_par.beta >= 0 &&
+bool SIR::check_state() const {
+  return (m_s >= 0 && m_i >= 0 && m_r >= 0 && m_par.beta >= 0 &&
           m_par.beta <= 1 && m_par.gamma >= 0 && m_par.gamma <= 1);
 }
 
-int Status::total() const {
-  double total{m_sir.s + m_sir.i + m_sir.r};
+int SIR::total() const {
+  double total{m_s + m_i + m_r};
   assert(total == std::round(total));
   int int_total = static_cast<int>(total);
   return int_total;
 };
 
-int Status::get_s() const { return m_sir.s; };
+int SIR::get_s() const { return m_s; };
 
-int Status::get_i() const { return m_sir.i; };
+int SIR::get_i() const { return m_i; };
 
-int Status::get_r() const { return m_sir.r; };
+int SIR::get_r() const { return m_r; };
 
-void Status::evolve() {
+void SIR::evolve() {
   if (!check_state()) {
     throw std::runtime_error{"Invalid data"};
   }
 
   const int N = total();
 
-  for (int j{}; j < m_days; ++j) {
-    double s = m_sir.s - m_par.beta * (m_sir.s / N) * m_sir.i;
-    double i =
-        m_sir.i + m_par.beta * (m_sir.s / N) * m_sir.i - m_par.gamma * m_sir.i;
-    double r = m_sir.r + m_par.gamma * m_sir.i;
+  double s = m_s - m_par.beta * (m_s / N) * m_i;
+  double i = m_i + m_par.beta * (m_s / N) * m_i - m_par.gamma * m_i;
+  double r = m_r + m_par.gamma * m_i;
 
-    m_sir.s = std::round(s);
-    m_sir.i = std::round(i);
-    m_sir.r = std::round(r);
+  m_s = std::round(s);
+  m_i = std::round(i);
+  m_r = std::round(r);
 
-    double sum{m_sir.s + m_sir.i + m_sir.r};
+  double sum{m_s + m_i + m_r};
 
-    int int_sum = static_cast<int>(sum);
+  int int_sum = static_cast<int>(sum);
 
-    int diff{std::abs(N - int_sum)};
+  int diff{std::abs(N - int_sum)};
 
-    if (N > int_sum) {
-      for (int i{}; i < diff; ++i) {
-        ++m_sir.i;
-      }
-    } else if (N < int_sum) {
-      for (int j{}; j < diff; ++j) {
-        --m_sir.s;
-      }
-    } else {
-    };
+  if (N > int_sum) {
+    for (int i{}; i < diff; ++i) {
+      ++m_i;
+    }
+  } else if (N < int_sum) {
+    for (int j{}; j < diff; ++j) {
+      --m_s;
+    }
+  } else {
+  };
 
-    int_sum = static_cast<int>(m_sir.s + m_sir.i + m_sir.r);
-    assert(N == int_sum);
-
-    int _s = get_s();
-    int _i = get_i();
-    int _r = get_r();
-    std::cout << "s: " << _s << '\n';
-    std::cout << "i: " << _i << '\n';
-    std::cout << "r: " << _r << '\n';
-    std::cout << "totale: " << total() << '\n';
-    std::cout << "------" << '\n';
-  }
+  int_sum = static_cast<int>(m_s + m_i + m_r);
+  assert(N == int_sum);
 };

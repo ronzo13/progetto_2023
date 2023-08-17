@@ -6,20 +6,15 @@ struct Param {
   double gamma{};
 };
 
-struct SIR {
-  double s{};
-  double i{};
-  double r{};
-};
-
-class Status {
+class SIR {
  private:
+  double m_s{};
+  double m_i{};
+  double m_r{};
   Param m_par{};
-  SIR m_sir{};
-  int m_days{};
 
  public:
-  Status(Param, SIR, int);
+  SIR(double, double, double, Param);
 
   bool check_state() const;
 
