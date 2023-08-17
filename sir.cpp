@@ -33,31 +33,43 @@ void Status::evolve() {
 
   const int N = total();
 
-  double s = m_sir.s - m_par.beta * (m_sir.s / N) * m_sir.i;
-  double i = m_sir.i + m_par.beta * (m_sir.s / N) * m_sir.i - m_par.gamma * m_sir.i;
-  double r = m_sir.r + m_par.gamma * m_sir.i;
+  for (int j{}; j < m_days; ++j) {
+    double s = m_sir.s - m_par.beta * (m_sir.s / N) * m_sir.i;
+    double i =
+        m_sir.i + m_par.beta * (m_sir.s / N) * m_sir.i - m_par.gamma * m_sir.i;
+    double r = m_sir.r + m_par.gamma * m_sir.i;
 
-  m_sir.s = std::round(s);
-  m_sir.i = std::round(i);
-  m_sir.r = std::round(r);
+    m_sir.s = std::round(s);
+    m_sir.i = std::round(i);
+    m_sir.r = std::round(r);
 
-  double sum{m_sir.s + m_sir.i + m_sir.r};
+    double sum{m_sir.s + m_sir.i + m_sir.r};
 
-  int int_sum = static_cast<int>(sum);
+    int int_sum = static_cast<int>(sum);
 
-  int diff{std::abs(N - int_sum)};
+    int diff{std::abs(N - int_sum)};
 
-  if (N > int_sum) {
-    for (int i{}; i < diff; ++i) {
-      ++m_sir.i;
-    }
-  } else if (N < int_sum) {
-    for (int j{}; j < diff; ++j) {
-      --m_sir.s;
-    }
-  } else {
-  };
+    if (N > int_sum) {
+      for (int i{}; i < diff; ++i) {
+        ++m_sir.i;
+      }
+    } else if (N < int_sum) {
+      for (int j{}; j < diff; ++j) {
+        --m_sir.s;
+      }
+    } else {
+    };
 
-  int_sum = static_cast<int>(m_sir.s + m_sir.i + m_sir.r);
-  assert(N == int_sum);
+    int_sum = static_cast<int>(m_sir.s + m_sir.i + m_sir.r);
+    assert(N == int_sum);
+
+    int _s = get_s();
+    int _i = get_i();
+    int _r = get_r();
+    std::cout << "s: " << _s << '\n';
+    std::cout << "i: " << _i << '\n';
+    std::cout << "r: " << _r << '\n';
+    std::cout << "totale: " << total() << '\n';
+    std::cout << "------" << '\n';
+  }
 };
