@@ -1,1 +1,0 @@
-/usr/bin/c++  -Wall -Wextra -g -fsanitize=address,undefined -fno-omit-frame-pointer  -fsanitize=address,undefined -fno-omit-frame-pointer CMakeFiles/sir.t.dir/sir.test.cpp.o CMakeFiles/sir.t.dir/sir.cpp.o -o sir.t 
