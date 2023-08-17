@@ -5,43 +5,43 @@
 #include <iostream>
 #include <stdexcept>
 
-SIR::SIR(double s, double i, double r, Param par)
-    : m_s{s}, m_i{i}, m_r{r}, m_par{par} {};
+Status::Status(Param par, SIR sir, int days)
+    : m_par{par}, m_sir{sir}, m_days{days} {};
 
-bool SIR::check_state() const {
-  return (m_s >= 0 && m_i >= 0 && m_r >= 0 && m_par.beta >= 0 &&
+bool Status::check_state() const {
+  return (m_sir.s >= 0 && m_sir.i >= 0 && m_sir.i >= 0 && m_par.beta >= 0 &&
           m_par.beta <= 1 && m_par.gamma >= 0 && m_par.gamma <= 1);
 }
 
-int SIR::total() const {
-  double total{m_s + m_i + m_r};
+int Status::total() const {
+  double total{m_sir.s + m_sir.i + m_sir.r};
   assert(total == std::round(total));
   int int_total = static_cast<int>(total);
   return int_total;
 };
 
-int SIR::get_s() const { return m_s; };
+int Status::get_s() const { return m_sir.s; };
 
-int SIR::get_i() const { return m_i; };
+int Status::get_i() const { return m_sir.i; };
 
-int SIR::get_r() const { return m_r; };
+int Status::get_r() const { return m_sir.r; };
 
-void SIR::evolve() {
+void Status::evolve() {
   if (!check_state()) {
     throw std::runtime_error{"Invalid data"};
   }
 
   const int N = total();
 
-  double s = m_s - m_par.beta * (m_s / N) * m_i;
-  double i = m_i + m_par.beta * (m_s / N) * m_i - m_par.gamma * m_i;
-  double r = m_r + m_par.gamma * m_i;
+  double s = m_sir.s - m_par.beta * (m_sir.s / N) * m_sir.i;
+  double i = m_sir.i + m_par.beta * (m_sir.s / N) * m_sir.i - m_par.gamma * m_sir.i;
+  double r = m_sir.r + m_par.gamma * m_sir.i;
 
-  m_s = std::round(s);
-  m_i = std::round(i);
-  m_r = std::round(r);
+  m_sir.s = std::round(s);
+  m_sir.i = std::round(i);
+  m_sir.r = std::round(r);
 
-  double sum{m_s + m_i + m_r};
+  double sum{m_sir.s + m_sir.i + m_sir.r};
 
   int int_sum = static_cast<int>(sum);
 
@@ -49,38 +49,15 @@ void SIR::evolve() {
 
   if (N > int_sum) {
     for (int i{}; i < diff; ++i) {
-      ++m_i;
+      ++m_sir.i;
     }
   } else if (N < int_sum) {
     for (int j{}; j < diff; ++j) {
-      --m_s;
+      --m_sir.s;
     }
   } else {
   };
 
-  int_sum = static_cast<int>(m_s + m_i + m_r);
+  int_sum = static_cast<int>(m_sir.s + m_sir.i + m_sir.r);
   assert(N == int_sum);
 };
-
-int main() {
-  int durata{};
-  std::cout << "durata epidemia: ";
-  std::cin >> durata;
-  SIR sir{93, 7, 0, {0.7, 0.2}};
-  int s = sir.get_s();
-  int i = sir.get_i();
-  int r = sir.get_r();
-  std::cout << "totale: " << sir.total() << '\n';
-  std::cout << "------" << '\n';
-  for (int j{}; j < durata; ++j) {
-    sir.evolve();
-    s = sir.get_s();
-    i = sir.get_i();
-    r = sir.get_r();
-    std::cout << "s: " << s << '\n';
-    std::cout << "i: " << i << '\n';
-    std::cout << "r: " << r << '\n';
-    std::cout << "totale: " << sir.total() << '\n';
-    std::cout << "------" << '\n';
-  }
-}
