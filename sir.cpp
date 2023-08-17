@@ -3,15 +3,21 @@
 #include <cassert>
 #include <cmath>
 #include <iostream>
-#include <numeric>
 #include <stdexcept>
 
 SIR::SIR(double s, double i, double r, Param par)
-    : m_s{s}, m_i{i}, m_r{r}, m_par{par} {};
+    : m_s{s}, m_i{i}, m_r{r}, m_par{par} {
+  if (!SIR::check_param()) {
+    throw std::runtime_error{"Invalid parameters beta and gamma"};
+  }
+};
 
-bool SIR::check_state() const{
-  return (m_s >= 0 && m_i >=0 && m_r >= 0 && m_par.beta >= 0 && m_par.beta <= 1 && m_par.gamma >= 0 && m_par.gamma <= 1);
+bool SIR::check_param() const {
+  return (m_par.beta >= 0 && m_par.beta <= 1 && m_par.gamma >= 0 &&
+          m_par.gamma <= 1);
 }
+
+bool SIR::check_state() const { return (m_s >= 0 && m_i >= 0 && m_r >= 0); }
 
 int SIR::total() const {
   double total{m_s + m_i + m_r};
@@ -27,8 +33,8 @@ int SIR::get_i() const { return m_i; };
 int SIR::get_r() const { return m_r; };
 
 void SIR::evolve() {
-  if(!SIR::check_state()){
-    throw std::runtime_error{"Invalid data"};
+  if (!SIR::check_state()) {
+    throw std::runtime_error{"Unacceptable S, I or R"};
   }
 
   const int N = total();
@@ -63,12 +69,16 @@ void SIR::evolve() {
 };
 
 int main() {
-  SIR sir{95, 5, 0, {0.6, 0.3}};
+  int durata{};
+  std::cout << "durata epidemia: ";
+  std::cin >> durata;
+  SIR sir{93, 7, 0, {0.7, 0.2}};
   int s = sir.get_s();
   int i = sir.get_i();
   int r = sir.get_r();
   std::cout << "totale: " << sir.total() << '\n';
-  for (int j{}; j < 10; ++j) {
+  std::cout << "------" << '\n';
+  for (int j{}; j < durata; ++j) {
     sir.evolve();
     s = sir.get_s();
     i = sir.get_i();
@@ -77,5 +87,6 @@ int main() {
     std::cout << "i: " << i << '\n';
     std::cout << "r: " << r << '\n';
     std::cout << "totale: " << sir.total() << '\n';
+    std::cout << "------" << '\n';
   }
 }
