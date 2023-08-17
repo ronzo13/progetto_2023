@@ -61,26 +61,3 @@ void SIR::evolve() {
   int_sum = static_cast<int>(m_s + m_i + m_r);
   assert(N == int_sum);
 };
-
-int main() {
-  int durata{};
-  std::cout << "durata epidemia: ";
-  std::cin >> durata;
-  SIR sir{93, 7, 0, {0.7, 0.2}};
-  int s = sir.get_s();
-  int i = sir.get_i();
-  int r = sir.get_r();
-  std::cout << "totale: " << sir.total() << '\n';
-  std::cout << "------" << '\n';
-  for (int j{}; j < durata; ++j) {
-    sir.evolve();
-    s = sir.get_s();
-    i = sir.get_i();
-    r = sir.get_r();
-    std::cout << "s: " << s << '\n';
-    std::cout << "i: " << i << '\n';
-    std::cout << "r: " << r << '\n';
-    std::cout << "totale: " << sir.total() << '\n';
-    std::cout << "------" << '\n';
-  }
-}
