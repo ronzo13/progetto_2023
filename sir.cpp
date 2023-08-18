@@ -6,12 +6,18 @@
 #include <stdexcept>
 
 SIR::SIR(double s, double i, double r, Param const& par)
-    : m_s{s}, m_i{i}, m_r{r}, m_par{par} {};
+    : m_s{s}, m_i{i}, m_r{r}, m_par{par} {
+  if (!SIR::check_param()) {
+    throw std::runtime_error{"Invalid parameters beta and gamma"};
+  }
+};
 
-bool SIR::check_state() const {
-  return (m_s >= 0 && m_i >= 0 && m_r >= 0 && m_par.beta >= 0 &&
-          m_par.beta <= 1 && m_par.gamma >= 0 && m_par.gamma <= 1);
+bool SIR::check_param() const {
+  return (m_par.beta >= 0 && m_par.beta <= 1 && m_par.gamma >= 0 &&
+          m_par.gamma <= 1);
 }
+
+bool SIR::check_state() const { return (m_s >= 0 && m_i >= 0 && m_r >= 0); }
 
 int SIR::total() const {
   double total{m_s + m_i + m_r};
