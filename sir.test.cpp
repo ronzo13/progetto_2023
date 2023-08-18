@@ -4,6 +4,24 @@
 
 #include "doctest.h"
 
+TEST_CASE("Testing what happens with beta or gamma out of range") {
+  SUBCASE("Beta out of range") {
+    Param param;
+    param.beta = 2;
+    param.gamma = 0.4;
+
+    CHECK_THROWS(SIR(350, 1, 0, param));
+  }
+
+  SUBCASE("Gamma out of range") {
+    Param param;
+    param.beta = 0.65;
+    param.gamma = 4;
+
+    CHECK_THROWS(SIR(350, 1, 0, param));
+  }
+}
+
 TEST_CASE("Testing the check_state function") {
   SUBCASE("Negative values for m_s") {
     SIR sir{-500, 2, 0, {0.5, 0.4}};
@@ -19,15 +37,8 @@ TEST_CASE("Testing the check_state function") {
     CHECK_THROWS(sir.evolve());
   }
 
-  SUBCASE("Beta out of range") {
-    SIR sir{500, 2, 0, {2, 0.3}};
-
-    CHECK(sir.check_state() == false);
-    CHECK_THROWS(sir.evolve());
-  }
-
-  SUBCASE("Gamma out of range") {
-    SIR sir{500, 2, 0, {0.6, 3}};
+  SUBCASE("Negative values for m_r") {
+    SIR sir{200, 3, -10, {0.7, 0.4}};
 
     CHECK(sir.check_state() == false);
     CHECK_THROWS(sir.evolve());
