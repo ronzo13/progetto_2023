@@ -2,6 +2,7 @@
 
 #include <cassert>
 #include <cmath>
+#include <iostream>
 #include <random>
 
 #include "cell.hpp"
@@ -11,12 +12,18 @@ Grid::Grid(int side) : m_side{side}, m_cells(side * side){};
 int Grid::get_side() const { return m_side; }
 
 Cell& Grid::get_cell(int pos) { return m_cells[pos]; };
-
 Cell const& Grid::get_cell(int pos) const { return m_cells[pos]; }
 
-int Grid::inf_neigh(Grid& init_grid) const {
+double Grid::random_value() const {
+  std::default_random_engine generator{std::random_device{}()};
+  std::uniform_real_distribution<double> distribution(0.0, 1.0);
+  double random_n = distribution(generator);
+
+  return random_n;
+}
+
+int Grid::inf_neigh(Grid& init_grid, int pos) const {
   int count{};
-  int pos{};
   int g_side{init_grid.get_side()};
   int prow{pos - g_side};
   int srow{pos + g_side};
@@ -53,19 +60,15 @@ void Grid::evolution(Grid& init_grid, double beta, double gamma) {
   int const side = init_grid.get_side();
   Grid next_grid{side};
 
-  std::default_random_engine generator{std::random_device{}()};
-  std::uniform_real_distribution<double> distribution(0.0, 1.0);
-  double random_n = distribution(generator);
-
   // infection and removal rules
   for (int j = 0; j != (side * side) - 1; ++j) {
     State i_person{init_grid.get_cell(j).get_state()};
 
     switch (i_person) {
       case State::Susceptible: {
-        double const p_i = 1.0 - pow(1.0 - beta, inf_neigh(init_grid));
+        double const p_i = 1.0 - pow(1.0 - beta, inf_neigh(init_grid, j));
         assert(p_i >= 0 && p_i <= 1);
-        if (random_n < p_i) {
+        if (random_value() < p_i) {
           next_grid.get_cell(j).set_state(State::Infected);
         } else {
           next_grid.get_cell(j).set_state(State::Susceptible);
@@ -86,4 +89,41 @@ void Grid::evolution(Grid& init_grid, double beta, double gamma) {
       } break;
     }
   }
+}
+
+//aggiungere funzione che conti il numero di suscettibili, infetti e rimossi
+
+int main() {
+  int side;
+  std::cout << "Insert the side of the grid: \n";
+  std::cin >> side;
+  Grid my_grid(side);
+
+  for (int i{0}; i < side * side; ++i) {
+    std::default_random_engine gen{std::random_device{}()};
+    std::uniform_int_distribution<> dist{0, 3};
+    int random_num = dist(gen);
+    switch (random_num) {
+      case 0: {
+        my_grid.get_cell(i).set_state(State::Susceptible);
+      } break;
+      case 1: {
+        my_grid.get_cell(i).set_state(State::Infected);
+      } break;
+      case 2: {
+        my_grid.get_cell(i).set_state(State::Removed);
+      } break;
+      case 3: {
+        my_grid.get_cell(i).set_state(State::Void);
+      } break;
+    }
+  }
+
+  int days{};
+  double gamma;
+  double beta;
+
+  std::cout << "Insert the epidemic duration (in days), gamma and beta: \n";
+  std::cin >> days >> gamma >> beta;
+
 }
