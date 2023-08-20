@@ -12,7 +12,7 @@ class Cell{
     Cell(State);
 
     State get_state() const; //ritorna lo stato di una cella
-    void set_state(State new_state); //assegna il nuovo stato a una cella
+    State set_state(State new_state); //assegna il nuovo stato a una cella
 };
 
 #endif

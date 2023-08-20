@@ -1,18 +1,28 @@
 #ifndef GRID_HPP
 #define GRID_HPP
 
-#include "cell.hpp"
 #include <vector>
 
-class Grid{
-    private:
-    int m_dim{};
-    std::vector<Cell> cells;
+#include "cell.hpp"
 
-    public:
-    Grid(int);
+class Grid {
+ private:
+  int m_side{};
+  std::vector<Cell> m_cells;
 
-    Grid evolve(Grid const&, )
-}
+ public:
+  Grid(int);
+
+  int get_side() const;
+
+  Cell& get_cell(
+      int);  // ritorna referenza modificabile ad una cella (suo stato)
+  Cell const& get_cell(
+      int) const;  // ritorna referenza costante a una cella (suo stato)
+
+  int inf_neigh(Grid&) const;
+
+  void evolution(Grid&, double, double);
+};
 
 #endif
