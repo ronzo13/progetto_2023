@@ -55,5 +55,4 @@ int main() {
       break;
     }
   }
-  std::cout << "the epidemic lasts for: " << size - 1 << " days" << '\n';
 }
