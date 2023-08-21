@@ -11,17 +11,14 @@ Grid::Grid(int side) : m_side{side}, m_cells(side * side){};
 
 int Grid::get_side() const { return m_side; }
 
-Cell& Grid::get_cell(int pos) {
-  assert(pos >= 0);
-  return m_cells[pos];
-};
 Cell const& Grid::get_cell(int pos) const {
   assert(pos >= 0);
   return m_cells[pos];
 }
 
 double Grid::random_value() const {
-  std::default_random_engine generator{std::random_device{}()};
+  std::random_device rd;
+  std::default_random_engine generator(rd());
   std::uniform_real_distribution<double> distribution(0.0, 1.0);
   double random_n = distribution(generator);
 
@@ -31,25 +28,25 @@ double Grid::random_value() const {
 int Grid::inf_neigh(Grid const& init_grid, int pos) const {
   assert(pos >= 0);
   int count{};
-  int g_side{init_grid.get_side()};
-  int prow{pos - g_side};
-  int srow{pos + g_side};
+  int g_side = init_grid.get_side();
+  int prow = pos - g_side;
+  int srow = pos + g_side;
 
-  for (int i = -1; i <= 1; ++i) {
+  for (int i{-1}; i <= 1; ++i) {
     int cell_prow = prow + i;  // celle della fila precedente
     if (init_grid.get_cell(cell_prow).get_state() == State::Infected) {
       ++count;
     }
   }
 
-  for (int i = -1; i <= 1; ++i) {
+  for (int i{-1}; i <= 1; ++i) {
     int cell_crow = pos + i;  // celle della fila in cui si trova pos
     if (init_grid.get_cell(cell_crow).get_state() == State::Infected) {
       ++count;
     }
   }
 
-  for (int i = -1; i <= 1; ++i) {
+  for (int i{-1}; i <= 1; ++i) {
     int cell_srow = srow + i;  // celle della fila successiva
     if (init_grid.get_cell(cell_srow).get_state() == State::Infected) {
       ++count;
@@ -69,8 +66,8 @@ Grid Grid::evolution(Grid const& init_grid, double beta, double gamma) {
   Grid next_grid{side};
 
   // infection and removal rules
-  for (int j = 0; j < side * side; ++j) {
-    State i_person{init_grid.get_cell(j).get_state()};
+  for (int j{}; j < side * side; ++j) {
+    State i_person = init_grid.get_cell(j).get_state();
 
     switch (i_person) {
       case State::Susceptible: {
@@ -106,11 +103,12 @@ int main() {
   int side;
   std::cout << "Insert the side of the grid: \n";
   std::cin >> side;
-  Grid my_grid(side);
+  Grid my_grid{side};
 
   // assegnazione casuale degli stati alle celle
-  for (int i{0}; i < side * side; ++i) {
-    std::default_random_engine gen{std::random_device{}()};
+  for (int i{}; i < side * side; ++i) {
+    std::random_device rd;
+    std::default_random_engine gen(rd());
     std::uniform_int_distribution<> dist{0, 3};
     int random_num = dist(gen);
     switch (random_num) {
@@ -130,8 +128,8 @@ int main() {
   }
 
   int days{};
-  double gamma;
-  double beta;
+  double gamma{};
+  double beta{};
 
   std::cout << "Insert the epidemic duration (in days), gamma and beta: \n";
   std::cin >> days >> gamma >> beta;
