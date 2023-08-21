@@ -11,8 +11,14 @@ Grid::Grid(int side) : m_side{side}, m_cells(side * side){};
 
 int Grid::get_side() const { return m_side; }
 
-Cell& Grid::get_cell(int pos) { return m_cells[pos]; };
-Cell const& Grid::get_cell(int pos) const { return m_cells[pos]; }
+Cell& Grid::get_cell(int pos) {
+  assert(pos >= 0);
+  return m_cells[pos];
+};
+Cell const& Grid::get_cell(int pos) const {
+  assert(pos >= 0);
+  return m_cells[pos];
+}
 
 double Grid::random_value() const {
   std::default_random_engine generator{std::random_device{}()};
@@ -22,7 +28,8 @@ double Grid::random_value() const {
   return random_n;
 }
 
-int Grid::inf_neigh(Grid& init_grid, int pos) const {
+int Grid::inf_neigh(Grid const& init_grid, int pos) const {
+  assert(pos >= 0);
   int count{};
   int g_side{init_grid.get_side()};
   int prow{pos - g_side};
@@ -56,12 +63,13 @@ int Grid::inf_neigh(Grid& init_grid, int pos) const {
   return count;
 }
 
-void Grid::evolution(Grid& init_grid, double beta, double gamma) {
+// crea e ritorna la griglia successiva
+Grid Grid::evolution(Grid const& init_grid, double beta, double gamma) {
   int const side = init_grid.get_side();
   Grid next_grid{side};
 
   // infection and removal rules
-  for (int j = 0; j != (side * side) - 1; ++j) {
+  for (int j = 0; j < side * side; ++j) {
     State i_person{init_grid.get_cell(j).get_state()};
 
     switch (i_person) {
@@ -75,7 +83,7 @@ void Grid::evolution(Grid& init_grid, double beta, double gamma) {
         }
       } break;
       case State::Infected: {
-        if (random_n < gamma) {
+        if (random_value() < gamma) {
           next_grid.get_cell(j).set_state(State::Removed);
         } else {
           next_grid.get_cell(j).set_state(State::Infected);
@@ -89,9 +97,10 @@ void Grid::evolution(Grid& init_grid, double beta, double gamma) {
       } break;
     }
   }
+  return next_grid;
 }
 
-//aggiungere funzione che conti il numero di suscettibili, infetti e rimossi
+// aggiungere funzione che conti il numero di suscettibili, infetti e rimossi
 
 int main() {
   int side;
@@ -99,6 +108,7 @@ int main() {
   std::cin >> side;
   Grid my_grid(side);
 
+  // assegnazione casuale degli stati alle celle
   for (int i{0}; i < side * side; ++i) {
     std::default_random_engine gen{std::random_device{}()};
     std::uniform_int_distribution<> dist{0, 3};
@@ -126,4 +136,5 @@ int main() {
   std::cout << "Insert the epidemic duration (in days), gamma and beta: \n";
   std::cin >> days >> gamma >> beta;
 
+  // qui deve succedere qualcosa
 }

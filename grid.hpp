@@ -18,11 +18,11 @@ class Grid {
   Cell& get_cell(int);  // ritorna referenza modificabile ad una cella
   Cell const& get_cell(int) const;  // ritorna referenza costante a una cella
 
-  int inf_neigh(Grid&, int) const;
+  int inf_neigh(Grid const&, int) const;
 
   double random_value() const;
 
-  void evolution(Grid&, double, double);
+  Grid evolution(Grid const&, double, double);
 
   //aggiungere funzione che conti il numero di suscettibili, infetti e rimossi
 };
