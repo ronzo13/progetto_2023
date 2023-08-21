@@ -9,9 +9,9 @@ int main() {
   std::cout << "gamma: ";
   std::cin >> param.gamma;
 
-  double new_s{};
-  double new_i{};
-  double new_r{};
+  int new_s{};
+  int new_i{};
+  int new_r{};
 
   std::cout << "s: ";
   std::cin >> new_s;
@@ -26,17 +26,33 @@ int main() {
   std::cout << "epidemic duration: ";
   std::cin >> days;
 
-  std::cout << "total: " << sir.total() << '\n';
+  std::cout << "total: " << sir.get_total() << '\n';
   std::cout << "------" << '\n';
-  for (int j{}; j < days; ++j) {
-    sir.evolve();
-    int s = sir.get_s();
-    int i = sir.get_i();
-    int r = sir.get_r();
-    std::cout << "s: " << s << '\n';
-    std::cout << "i: " << i << '\n';
-    std::cout << "r: " << r << '\n';
-    std::cout << "total: " << sir.total() << '\n';
+
+  std::vector<SIR> epidemic = sir.evolve(days);
+
+  /* nel ciclo viene creato un ogetto di tipo SIR const&
+  a ogni iterazione viene creato un alias costante del contenuto della cella del
+  vettore
+  vengono poi chiamate delle funzioni di questo alias costante (const&)
+  */
+
+  int day{};
+  int size = epidemic.size();
+  for (SIR const& _sir : epidemic) {
+    // bisogna cambiare il nome di sir già usato sopra?
+    std::cout << "day: " << day << '\n';
+    std::cout << "s: " << _sir.get_s() << '\n';
+    std::cout << "i: " << _sir.get_i() << '\n';
+    std::cout << "r: " << _sir.get_r() << '\n';
+    std::cout << "total: " << _sir.get_total() << '\n';
     std::cout << "------" << '\n';
+
+    if (day <= size) {
+      ++day;
+    } else {
+      std::cout << "the epidemic lasts for: " << day << " days" << '\n';
+      break;
+    }
   }
 }

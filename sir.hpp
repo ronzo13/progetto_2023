@@ -1,3 +1,5 @@
+#include <vector>
+
 #ifndef SIR_HPP
 #define SIR_HPP
 
@@ -11,21 +13,24 @@ class SIR {
   double m_s{};
   double m_i{};
   double m_r{};
+  int m_total{};
   Param m_par{};
 
  public:
-  SIR(double, double, double, Param const&);
+  SIR(int, int, int, Param const&);
 
   bool check_param() const;
   bool check_state() const;
 
-  void evolve();
+  std::vector<SIR> evolve(int days);
 
-  int total() const;
+  int get_total() const;
 
   int get_s() const;
   int get_i() const;
   int get_r() const;
 };
+
+bool operator==(SIR const&, SIR const&);
 
 #endif
