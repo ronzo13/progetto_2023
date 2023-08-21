@@ -1,7 +1,7 @@
+#include <vector>
+
 #ifndef GRID_HPP
 #define GRID_HPP
-
-#include <vector>
 
 #include "cell.hpp"
 

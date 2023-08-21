@@ -9,10 +9,10 @@ class Cell{
 
     public:
     Cell();
-    Cell(State);
+    Cell(State const&);
 
     State get_state() const; //ritorna lo stato di una cella
-    State set_state(State new_state); //assegna il nuovo stato a una cella
+    State set_state(State const& new_state); //assegna il nuovo stato a una cella
 };
 
 #endif
