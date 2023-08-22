@@ -28,8 +28,6 @@ bool SIR::check_state() const {
 
 int SIR::get_total() const { return m_total; };
 
-State SIR::get_state() const { return m_state; }
-
 std::vector<State> SIR::evolve(int days) {
   if (!SIR::check_state()) {
     throw std::runtime_error{"Invalid data"};

@@ -32,8 +32,6 @@ class SIR {
   std::vector<State> evolve(int days);
 
   int get_total() const;
-
-  State get_state() const;
 };
 
 bool operator==(State const&, State const&);

@@ -1,15 +1,19 @@
 #include "grid.hpp"
 
+#include <algorithm>
 #include <cassert>
 #include <cmath>
 #include <iostream>
 #include <random>
+#include <vector>
 
 #include "cell.hpp"
 
 Grid::Grid(int side) : m_side{side}, m_cells(side * side){};
 
 int Grid::get_side() const { return m_side; }
+
+Cell& Grid::get_cell(int pos) { return m_cells[pos]; };
 
 Cell const& Grid::get_cell(int pos) const {
   assert(pos >= 0);
@@ -97,78 +101,26 @@ Grid Grid::evolution(Grid const& init_grid, double beta, double gamma) {
   return next_grid;
 }
 
-int Grid::get_susc() const {
-  int s_count{};
-  for (auto const& cell : m_cells) {
-    if (cell.get_state() == State::Susceptible) {
-      ++s_count;
-    }
-  }
-  return s_count;
-}
-
-int Grid::get_inf() const {
-  int i_count{};
-  for (auto const& cell : m_cells) {
-    if (cell.get_state() == State::Infected) {
-      ++i_count;
-    }
-  }
-  return i_count;
-}
-
-int Grid::get_rem() const {
-  auto v_grid = this->m_cells;
-  int r_count{};
-
-  for (auto const& cell : v_grid) {
-    if (cell.get_state() == State::Removed) {
-      ++r_count;
-    }
-  }
-  return r_count;
-}
-
-int Grid::get_void() const {
-  auto v_grid = this->m_cells;
-  int v_count{};
-
-  for (auto const& cell : v_grid) {
-    if (cell.get_state() == State::Infected) {
-      ++v_count;
-    }
-  }
-  return v_count;
-}
-
 int Grid::count_s() const {
   return std::accumulate(
-    m_cells.begin(), m_cells.end(), 0,
-    [](int sum, const Cell& cell) {
-      return sum + (cell.get_state() == State::Susceptible ? 1 : 0);
-    }
-  );
+      m_cells.begin(), m_cells.end(), 0, [](int sum, const Cell& cell) {
+        return sum + (cell.get_state() == State::Susceptible ? 1 : 0);
+      });
 }
 
 int Grid::count_i() const {
   return std::accumulate(
-    m_cells.begin(), m_cells.end(), 0,
-    [](int sum, const Cell& cell) {
-      return sum + (cell.get_state() == State::Infected ? 1 : 0);
-    }
-  );
+      m_cells.begin(), m_cells.end(), 0, [](int sum, const Cell& cell) {
+        return sum + (cell.get_state() == State::Infected ? 1 : 0);
+      });
 }
 
 int Grid::count_r() const {
   return std::accumulate(
-    m_cells.begin(), m_cells.end(), 0,
-    [](int sum, const Cell& cell) {
-      return sum + (cell.get_state() == State::Removed ? 1 : 0);
-    }
-  );
+      m_cells.begin(), m_cells.end(), 0, [](int sum, const Cell& cell) {
+        return sum + (cell.get_state() == State::Removed ? 1 : 0);
+      });
 }
-
-
 
 int main() {
   int side;

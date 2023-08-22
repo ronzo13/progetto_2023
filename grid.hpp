@@ -1,9 +1,9 @@
 #include <vector>
 
+#include "cell.hpp"
+
 #ifndef GRID_HPP
 #define GRID_HPP
-
-#include "cell.hpp"
 
 class Grid {
  private:
@@ -15,10 +15,6 @@ class Grid {
 
   int get_side() const;
 
-  int count_s() const;
-  int count_i() const;
-  int count_r() const;
-
   Cell& get_cell(int);  // ritorna referenza modificabile ad una cella
   Cell const& get_cell(int) const;  // ritorna referenza costante a una cella
 
@@ -28,12 +24,9 @@ class Grid {
 
   Grid evolution(Grid const&, double, double);
 
-  int get_susc() const;
-  int get_inf() const;
-  int get_rem() const;
-  int get_void() const;
-
-  // aggiungere funzione che conti il numero di suscettibili, infetti e rimossi
+  int count_s() const;
+  int count_i() const;
+  int count_r() const;
 };
 
 #endif
