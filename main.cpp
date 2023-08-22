@@ -3,9 +3,31 @@
 #include "sir.hpp"
 
 int main() {
+  bool valid_input{false};
+
   Param param{};
-  std::cout << "beta: ";
-  std::cin >> param.beta;
+
+  while (!valid_input) {
+    std::cout << "beta: ";
+    std::string input;
+    std::cin >> input;
+    try {
+      double check_beta = std::stod(input);  // qui avviene il troncamento
+      // riparte anche se inserisco int
+      if (check_beta >= 0 && check_beta <= 1) {
+        valid_input = true;
+      } else {
+        std::cout
+            << "Invalid value for beta. Please enter a number between 0 and 1."
+            << '\n';
+      }
+    } catch (const std::invalid_argument& e) {
+      std::cout
+          << "Invalid value for beta. Please enter a number between 0 and 1."
+          << '\n';
+    }
+  }
+
   std::cout << "gamma: ";
   std::cin >> param.gamma;
 
@@ -13,15 +35,14 @@ int main() {
   int new_i{};
   int new_r{};
 
-  bool valid_input{false};
-  do {
+  while (!valid_input) {
     std::cout << "s: ";
     std::string input;
     std::cin >> input;
     try {
       double check_s = std::stod(input);  // qui avviene il troncamento
       // riparte anche se inserisco int
-      if (check_s == static_cast<int>(check_s)) {
+      if (check_s == static_cast<int>(check_s) && check_s >= 0) {
         new_s = static_cast<int>(check_s);
         valid_input = true;
       } else {
@@ -31,7 +52,7 @@ int main() {
     } catch (const std::invalid_argument& e) {
       std::cout << "Invalid value for s. Please enter a valid integer." << '\n';
     }
-  } while (!valid_input);
+  }
 
   // std::cout << "s: ";
   // std::cin >> new_s;

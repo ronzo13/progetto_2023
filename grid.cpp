@@ -1,9 +1,11 @@
 #include "grid.hpp"
 
+#include <algorithm>
 #include <cassert>
 #include <cmath>
 #include <iostream>
 #include <random>
+#include <vector>
 
 #include "cell.hpp"
 
@@ -11,13 +13,10 @@ Grid::Grid(int side) : m_side{side}, m_cells(side * side){};
 
 int Grid::get_side() const { return m_side; }
 
-Cell& Grid::get_cell(int pos) { //referenza modificabile a una cella
-  assert(pos >= 0 && pos < m_side * m_side);
-  return m_cells[pos];
-};
+Cell& Grid::get_cell(int pos) { return m_cells[pos]; };
 
-Cell const& Grid::get_cell(int pos) const { //referenza non modificabile a una cella
-  assert(pos >= 0 && pos < m_side * m_side);
+Cell const& Grid::get_cell(int pos) const {
+  assert(pos >= 0);
   return m_cells[pos];
 }
 

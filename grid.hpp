@@ -1,9 +1,9 @@
 #include <vector>
 
+#include "cell.hpp"
+
 #ifndef GRID_HPP
 #define GRID_HPP
-
-#include "cell.hpp"
 
 class Grid {
  private:
@@ -24,7 +24,6 @@ class Grid {
 
   Grid evolution(Grid const&, double, double);
 
-  // conteggio quante celle ci sono per ogni stato
   int count_s() const;
   int count_i() const;
   int count_r() const;
