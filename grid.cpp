@@ -1,11 +1,9 @@
 #include "grid.hpp"
 
-#include <algorithm>
 #include <cassert>
 #include <cmath>
 #include <iostream>
 #include <random>
-#include <vector>
 
 #include "cell.hpp"
 
@@ -13,10 +11,14 @@ Grid::Grid(int side) : m_side{side}, m_cells(side * side){};
 
 int Grid::get_side() const { return m_side; }
 
-Cell& Grid::get_cell(int pos) { return m_cells[pos]; };
+Cell& Grid::get_cell(int pos) {  // referenza modificabile a una cella
+  assert(pos >= 0 && pos < m_side * m_side);
+  return m_cells[pos];
+};
 
-Cell const& Grid::get_cell(int pos) const {
-  assert(pos >= 0);
+Cell const& Grid::get_cell(
+    int pos) const {  // referenza non modificabile a una cella
+  assert(pos >= 0 && pos < m_side * m_side);
   return m_cells[pos];
 }
 
@@ -120,42 +122,4 @@ int Grid::count_r() const {
       m_cells.begin(), m_cells.end(), 0, [](int sum, const Cell& cell) {
         return sum + (cell.get_state() == State::Removed ? 1 : 0);
       });
-}
-
-int main() {
-  int side;
-  std::cout << "Insert the side of the grid: \n";
-  std::cin >> side;
-  Grid my_grid{side};
-
-  // assegnazione casuale degli stati alle celle
-  for (int i{}; i < side * side; ++i) {
-    std::random_device rd;
-    std::default_random_engine gen(rd());
-    std::uniform_int_distribution<> dist{0, 3};
-    int random_num = dist(gen);
-    switch (random_num) {
-      case 0: {
-        my_grid.get_cell(i).set_state(State::Susceptible);
-      } break;
-      case 1: {
-        my_grid.get_cell(i).set_state(State::Infected);
-      } break;
-      case 2: {
-        my_grid.get_cell(i).set_state(State::Removed);
-      } break;
-      case 3: {
-        my_grid.get_cell(i).set_state(State::Void);
-      } break;
-    }
-  }
-
-  int days{};
-  double gamma{};
-  double beta{};
-
-  std::cout << "Insert the epidemic duration (in days), gamma and beta: \n";
-  std::cin >> days >> gamma >> beta;
-
-  // qui deve succedere qualcosa
 }
