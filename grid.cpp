@@ -97,7 +97,49 @@ Grid Grid::evolution(Grid const& init_grid, double beta, double gamma) {
   return next_grid;
 }
 
-// aggiungere funzione che conti il numero di suscettibili, infetti e rimossi
+int Grid::get_susc() const {
+  int s_count{};
+  for (auto const& cell : m_cells) {
+    if (cell.get_state() == State::Susceptible) {
+      ++s_count;
+    }
+  }
+  return s_count;
+}
+
+int Grid::get_inf() const {
+  int i_count{};
+  for (auto const& cell : m_cells) {
+    if (cell.get_state() == State::Infected) {
+      ++i_count;
+    }
+  }
+  return i_count;
+}
+
+int Grid::get_rem() const {
+  auto v_grid = this->m_cells;
+  int r_count{};
+
+  for (auto const& cell : v_grid) {
+    if (cell.get_state() == State::Removed) {
+      ++r_count;
+    }
+  }
+  return r_count;
+}
+
+int Grid::get_void() const {
+  auto v_grid = this->m_cells;
+  int v_count{};
+
+  for (auto const& cell : v_grid) {
+    if (cell.get_state() == State::Infected) {
+      ++v_count;
+    }
+  }
+  return v_count;
+}
 
 int main() {
   int side;

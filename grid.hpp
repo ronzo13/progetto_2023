@@ -24,7 +24,12 @@ class Grid {
 
   Grid evolution(Grid const&, double, double);
 
-  //aggiungere funzione che conti il numero di suscettibili, infetti e rimossi
+  int get_susc() const;
+  int get_inf() const;
+  int get_rem() const;
+  int get_void() const;
+
+  // aggiungere funzione che conti il numero di suscettibili, infetti e rimossi
 };
 
 #endif

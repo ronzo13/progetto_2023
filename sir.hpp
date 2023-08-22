@@ -8,21 +8,28 @@ struct Param {
   double gamma{};
 };
 
+struct State {
+  double s{};
+  double i{};
+  double r{};
+
+  State() = default;
+  State(int, int, int);
+};
+
 class SIR {
  private:
-  double m_s{};
-  double m_i{};
-  double m_r{};
   int m_total{};
+  State m_state{};
   Param m_par{};
 
  public:
-  SIR(int, int, int, Param const&);
+  SIR(State const&, Param const&);
 
   bool check_param() const;
   bool check_state() const;
 
-  std::vector<SIR> evolve(int days);
+  std::vector<State> evolve(int days);
 
   int get_total() const;
 
@@ -31,6 +38,6 @@ class SIR {
   int get_r() const;
 };
 
-bool operator==(SIR const&, SIR const&);
+bool operator==(State const&, State const&);
 
 #endif
