@@ -33,9 +33,7 @@ class SIR {
 
   int get_total() const;
 
-  int get_s() const;
-  int get_i() const;
-  int get_r() const;
+  State get_state() const;
 };
 
 bool operator==(State const&, State const&);
