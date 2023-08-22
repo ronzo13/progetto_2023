@@ -28,11 +28,7 @@ bool SIR::check_state() const {
 
 int SIR::get_total() const { return m_total; };
 
-int SIR::get_s() const { return m_state.s; };
-
-int SIR::get_i() const { return m_state.i; };
-
-int SIR::get_r() const { return m_state.r; };
+State SIR::get_state() const { return m_state; }
 
 std::vector<State> SIR::evolve(int days) {
   if (!SIR::check_state()) {
