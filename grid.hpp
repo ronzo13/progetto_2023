@@ -15,6 +15,10 @@ class Grid {
 
   int get_side() const;
 
+  int count_s() const;
+  int count_i() const;
+  int count_r() const;
+
   Cell& get_cell(int);  // ritorna referenza modificabile ad una cella
   Cell const& get_cell(int) const;  // ritorna referenza costante a una cella
 

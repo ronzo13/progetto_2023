@@ -141,6 +141,35 @@ int Grid::get_void() const {
   return v_count;
 }
 
+int Grid::count_s() const {
+  return std::accumulate(
+    m_cells.begin(), m_cells.end(), 0,
+    [](int sum, const Cell& cell) {
+      return sum + (cell.get_state() == State::Susceptible ? 1 : 0);
+    }
+  );
+}
+
+int Grid::count_i() const {
+  return std::accumulate(
+    m_cells.begin(), m_cells.end(), 0,
+    [](int sum, const Cell& cell) {
+      return sum + (cell.get_state() == State::Infected ? 1 : 0);
+    }
+  );
+}
+
+int Grid::count_r() const {
+  return std::accumulate(
+    m_cells.begin(), m_cells.end(), 0,
+    [](int sum, const Cell& cell) {
+      return sum + (cell.get_state() == State::Removed ? 1 : 0);
+    }
+  );
+}
+
+
+
 int main() {
   int side;
   std::cout << "Insert the side of the grid: \n";
