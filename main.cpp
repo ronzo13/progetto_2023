@@ -19,6 +19,7 @@ int main() {
       double check_beta = std::stod(input);  // qui avviene il troncamento
       // riparte anche se inserisco int
       if (check_beta >= 0 && check_beta <= 1) {
+        param.beta = check_beta;
         valid_input = true;
       } else {
         std::cout
@@ -46,6 +47,7 @@ int main() {
       double check_gamma = std::stod(input);  // qui avviene il troncamento
       // riparte anche se inserisco int
       if (check_gamma >= 0 && check_gamma <= 1) {
+        param.gamma = check_gamma;
         valid_input = true;
       } else {
         std::cout
