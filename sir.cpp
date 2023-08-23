@@ -29,15 +29,15 @@ bool SIR::check_state() const {
 int SIR::get_total() const { return m_total; };
 
 std::vector<State> SIR::evolve(int days) {
-  if (!SIR::check_state()) {
-    throw std::runtime_error{"Invalid data"};
-  }
-
   std::vector<State> v_evo{m_state};
 
   int const N = get_total();
 
   for (int y{}; y < days; ++y) {
+    if (!SIR::check_state()) {
+      throw std::runtime_error{"Invalid data"};
+    }
+
     State const& prev_st = v_evo.back();  // referenza all'ultimo elemento
 
     m_state.s = prev_st.s - m_par.beta * (prev_st.s / N) * prev_st.i;
