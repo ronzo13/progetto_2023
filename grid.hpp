@@ -18,6 +18,8 @@ class Grid {
   Cell& get_cell(int);  // ritorna referenza modificabile ad una cella
   Cell const& get_cell(int) const;  // ritorna referenza costante a una cella
 
+  void fill(int, int, Grid&);
+
   int inf_neigh(Grid const&, int) const;
 
   double random_value() const;
