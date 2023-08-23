@@ -1,7 +1,8 @@
 #include <iostream>
 #include <random>
 
-#include "grid.cpp"
+#include "cell.hpp"
+#include "grid.hpp"
 
 int main() {
   int side;
@@ -20,7 +21,7 @@ int main() {
                                     // la conversione è forzata
   int n_i = side * side * your_pi;  // """"
 
-  my_grid.fill( n_s, n_i, my_grid);
+  my_grid.fill(n_s, n_i, my_grid);
 
   for (int i{0}; i < side; ++i) {
     std::cout << "\n";
@@ -37,6 +38,33 @@ int main() {
       }
       if (my_grid.get_cell(cell).get_state() == State::Void) {
         std::cout << " □ ";
+      }
+    }
+  }
+  double beta{0.5};
+  double gamma{0.2};
+  int days{3};
+  for (int i{}; i < days; ++i) {
+    std::cout << '\n';
+    std::cout << "---------------------------";
+    Grid new_grid = my_grid;
+    new_grid.evolution(my_grid, beta, gamma);
+    for (int i{0}; i < side; ++i) {
+      std::cout << "\n";
+      for (int j{0}; j < side; ++j) {
+        int cell = i * side + j;
+        if (new_grid.get_cell(cell).get_state() == State::Susceptible) {
+          std::cout << " S ";
+        }
+        if (new_grid.get_cell(cell).get_state() == State::Infected) {
+          std::cout << " I ";
+        }
+        if (new_grid.get_cell(cell).get_state() == State::Removed) {
+          std::cout << " R ";
+        }
+        if (new_grid.get_cell(cell).get_state() == State::Void) {
+          std::cout << " □ ";
+        }
       }
     }
   }

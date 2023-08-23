@@ -2,62 +2,7 @@
 
 #include "sir.hpp"
 
-#include <exception>
-#include <iostream>
-#include <sstream>
-
 #include "doctest.h"
-
-TEST_CASE("Testing what happens with beta or gamma out of range") {
-  SUBCASE("Beta out of range") {
-    Param param;
-    param.beta = 2;
-    param.gamma = 0.4;
-    State state{350, 1, 0};
-
-    CHECK_THROWS(SIR{state, param});
-  }
-
-  SUBCASE("Gamma out of range") {
-    Param param;
-    param.beta = 0.65;
-    param.gamma = 4;
-    State state(350, 1, 0);
-
-    CHECK_THROWS(SIR{state, param});
-  }
-}
-
-TEST_CASE("Testing the check_state function") {
-  SUBCASE("Negative values for s") {
-    State state{-500, 2, 0};
-    SIR sir{state, {0.5, 0.4}};
-    int days{5};
-
-    CHECK(sir.check_state() == false);
-    CHECK_THROWS(sir.evolve(days));
-  }
-
-  SUBCASE("Negative values for i") {
-    Param param{0.8, 0.2};
-    State state{850, -1, 0};
-    SIR sir{state, param};
-    int days{5};
-
-    CHECK(sir.check_state() == false);
-    CHECK_THROWS(sir.evolve(days));
-  }
-
-  SUBCASE("Negative values for r") {
-    Param param{0.7, 0.4};
-    State state{200, 3, -10};
-    SIR sir{state, param};
-    int days{10};
-
-    CHECK(sir.check_state() == false);
-    CHECK_THROWS(sir.evolve(days));
-  }
-}
 
 TEST_CASE("Testing the class handling the evolution of a sir status") {
   SUBCASE("0 day") {

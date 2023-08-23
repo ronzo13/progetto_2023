@@ -7,14 +7,14 @@
 
 #include "cell.hpp"
 
-Grid::Grid(int side) : m_side{side}, m_cells(side * side){};
+Grid::Grid(int side) : m_side{side}, m_cells(side * side) {}
 
 int Grid::get_side() const { return m_side; }
 
 Cell& Grid::get_cell(int pos) {  // referenza modificabile a una cella
   assert(pos >= 0 && pos < m_side * m_side);
   return m_cells[pos];
-};
+}
 
 Cell const& Grid::get_cell(
     int pos) const {  // referenza non modificabile a una cella
@@ -22,9 +22,9 @@ Cell const& Grid::get_cell(
   return m_cells[pos];
 }
 
-void Grid::fill(int s, int i, Grid& init_grid){
-    // riempio caselle casuali della grigli con i suscettibili ottenuti dalla %
-    // inserita
+void Grid::fill(int s, int i, Grid& init_grid) {
+  // riempio caselle casuali della grigli con i suscettibili ottenuti dalla %
+  // inserita
   for (int j{0}; j < s; ++j) {
     std::default_random_engine gen{std::random_device{}()};
     std::uniform_int_distribution<> dist{0, (m_side * m_side) - 1};
@@ -33,15 +33,15 @@ void Grid::fill(int s, int i, Grid& init_grid){
     init_grid.get_cell(random_num).set_state(State::Susceptible);
   }
 
-   // riempio caselle casuali della grigli con i suscettibili ottenuti dalla %
-   // inserita
+  // riempio caselle casuali della grigli con i suscettibili ottenuti dalla %
+  // inserita
   for (int j{0}; j < i; ++j) {
     std::default_random_engine gen{std::random_device{}()};
     std::uniform_int_distribution<> dist{0, (m_side * m_side) - 1};
     int random_num = dist(gen);
 
     init_grid.get_cell(random_num).set_state(State::Infected);
-  }    
+  }
 }
 
 double Grid::random_value() const {
