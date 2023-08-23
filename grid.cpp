@@ -22,12 +22,16 @@ Cell const& Grid::get_cell(
   return m_cells[pos];
 }
 
-void Grid::fill(int s, int i, Grid& init_grid) {
+void Grid::fill(double p_s, double p_i, Grid& init_grid) {
   // riempio caselle casuali della grigli con i suscettibili ottenuti dalla %
   // inserita
+  int s = m_side * m_side * p_s;
+  int i = m_side * m_side * p_i;
+
   for (int j{0}; j < s; ++j) {
-    std::default_random_engine gen{std::random_device{}()};
-    std::uniform_int_distribution<> dist{0, (m_side * m_side) - 1};
+    std::random_device rd;
+    std::default_random_engine gen(rd());
+    std::uniform_int_distribution<> dist(0, (m_side * m_side) - 1);
     int random_num = dist(gen);
 
     init_grid.get_cell(random_num).set_state(State::Susceptible);
@@ -36,8 +40,9 @@ void Grid::fill(int s, int i, Grid& init_grid) {
   // riempio caselle casuali della grigli con i suscettibili ottenuti dalla %
   // inserita
   for (int j{0}; j < i; ++j) {
-    std::default_random_engine gen{std::random_device{}()};
-    std::uniform_int_distribution<> dist{0, (m_side * m_side) - 1};
+    std::random_device rd;
+    std::default_random_engine gen(rd());
+    std::uniform_int_distribution<> dist(0, (m_side * m_side) - 1);
     int random_num = dist(gen);
 
     init_grid.get_cell(random_num).set_state(State::Infected);
