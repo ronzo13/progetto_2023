@@ -18,7 +18,7 @@ class Grid {
   Cell& get_cell(int);  // ritorna referenza modificabile ad una cella
   Cell const& get_cell(int) const;  // ritorna referenza costante a una cella
 
-  void fill(int, int, Grid&);
+  void fill(double, double, Grid&);
 
   int inf_neigh(Grid const&, int) const;
 
