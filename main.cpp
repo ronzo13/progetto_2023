@@ -5,21 +5,18 @@
 
 int main() {
   Param param{};
-  double beta{}, gamma{};
-  param.beta = valid_beta(beta);
-  param.gamma = valid_gamma(gamma);
+  param.beta = valid_beta();
+  param.gamma = valid_gamma();
 
   valid_R0(param);
 
-  int new_s{}, new_i{}, new_r{};
-  int s = valid_s(new_s);
-  int i = valid_i(new_i);
-  int r = valid_r(new_r);
+  int s = valid_s();
+  int i = valid_i();
+  int r = valid_r();
   State state(s, i, r);
   SIR sir{state, param};
 
-  int new_days{};
-  int days = valid_days(new_days);
+  int days = valid_days();
 
   std::cout << "total: " << sir.get_total() << '\n';
   std::cout << "------" << '\n';

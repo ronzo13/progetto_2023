@@ -12,9 +12,9 @@ consentiti il messaggio di errore parte ad opera dell'else, altrimenti se si
 inserisce un carattere il messaggio di errore parte ad opera del catch, sono
 quindi entrambi necessari*/
 
-double valid_beta(double beta) {
+double valid_beta() {
   bool valid_input{false};
-
+  double beta{};
   while (!valid_input) {
     std::cout << "beta: ";
     std::string input;
@@ -44,9 +44,9 @@ double valid_beta(double beta) {
   return beta;
 }
 
-double valid_gamma(double gamma) {
+double valid_gamma() {
   bool valid_input{false};
-
+  double gamma{};
   while (!valid_input) {
     std::cout << "gamma: ";
     std::string input;
@@ -83,15 +83,15 @@ void valid_R0(Param& par) {
   while (par.beta <= par.gamma) {
     std::cout << "Since beta < gamma the R0 index is less than 1" << '\n';
     std::cout << "Please insert beta greater than gamma" << '\n';
-    par.beta = valid_beta(par.beta);
-    par.gamma = valid_gamma(par.gamma);
+    par.beta = valid_beta();
+    par.gamma = valid_gamma();
   }
   std::cout << "Since beta > gamma, R0 > 1, the epidemic starts" << '\n';
 }
 
-int valid_s(int new_s) {
+int valid_s() {
   bool valid_input{false};
-
+  int new_s{};
   while (!valid_input) {
     std::cout << "s: ";
     std::string input;
@@ -119,9 +119,9 @@ int valid_s(int new_s) {
   return new_s;
 }
 
-int valid_i(int new_i) {
+int valid_i() {
   bool valid_input{false};
-
+  int new_i{};
   while (!valid_input) {
     std::cout << "i: ";
     std::string input;
@@ -148,9 +148,9 @@ int valid_i(int new_i) {
   return new_i;
 }
 
-int valid_r(int new_r) {
+int valid_r() {
   bool valid_input{false};
-
+  int new_r{};
   while (!valid_input) {
     std::cout << "r: ";
     std::string input;
@@ -177,9 +177,9 @@ int valid_r(int new_r) {
   return new_r;
 }
 
-int valid_days(int new_days) {
+int valid_days() {
   bool valid_input{false};
-
+  int new_days{};
   while (!valid_input) {
     std::cout << "epidemic duration : ";
     std::string input;
@@ -210,9 +210,9 @@ int valid_days(int new_days) {
   return new_days;
 }
 
-double valid_S_percentage(double p_s) {
+double valid_S_percentage() {
   bool valid_input{false};
-
+  double p_s{};
   while (!valid_input) {
     std::cout << "S percentage: ";
     std::string input;
@@ -243,9 +243,9 @@ double valid_S_percentage(double p_s) {
   return p_s;
 }
 
-double valid_I_percentage(double p_i) {
+double valid_I_percentage() {
   bool valid_input{false};
-
+  double p_i{};
   while (!valid_input) {
     std::cout << "I percentage: ";
     std::string input;

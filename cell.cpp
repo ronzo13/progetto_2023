@@ -1,13 +1,13 @@
 #include "cell.hpp"
 
 Cell::Cell()
-    : m_state{State::Void} {};  // scelgo che di default una casella è vuota
+    : m_cond{Cond::Void} {};  // scelgo che di default una casella è vuota
 
-Cell::Cell(State const& init_state) : m_state{init_state} {}
+Cell::Cell(Cond const& init_cond) : m_cond{init_cond} {}
 
-State Cell::get_state() const { return m_state; }
+Cond Cell::get_cond() const { return m_cond; }
 
-State Cell::set_state(State const& new_state) {
-  m_state = new_state;
-  return new_state;
+Cond Cell::set_cond(Cond const& new_cond) {
+  m_cond = new_cond;
+  return new_cond;
 }

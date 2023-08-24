@@ -3,22 +3,22 @@
 #ifndef VALIDATE_INPUT_HPP
 #define VALIDATE_INPUT_HPP
 
-double valid_beta(double);
+double valid_beta();
 
-double valid_gamma(double);
+double valid_gamma();
 
 void valid_R0(Param&);
 
-int valid_s(int);
+int valid_s();
 
-int valid_i(int);
+int valid_i();
 
-int valid_r(int);
+int valid_r();
 
-int valid_days(int);
+int valid_days();
 
-double valid_S_percentage(double);
+double valid_S_percentage();
 
-double valid_I_percentage(double);
+double valid_I_percentage();
 
 #endif
