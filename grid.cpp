@@ -22,6 +22,10 @@ Cell const& Grid::get_cell(
   return m_cells[pos];
 }
 
+bool Grid::valid_coord(int row, int col) const{
+  return row >= 0 && row < m_side && col >= 0 && col < m_side;
+}
+
 void Grid::fill(double p_s, double p_i, Grid& init_grid) {
   // riempio caselle casuali della grigli con i suscettibili ottenuti dalla %
   // inserita
@@ -59,35 +63,25 @@ double Grid::random_value() const {
 }
 
 int Grid::inf_neigh(Grid const& init_grid, int pos) const {
-  assert(pos >= 0);
   int count{};
   int g_side = init_grid.get_side();
-  int prow = pos - g_side;
-  int srow = pos + g_side;
+  assert(pos >= 0 && pos < g_side * g_side);
+  int row = pos / g_side;
+  int col = pos % g_side;
 
-  for (int i{-1}; i <= 1; ++i) {
-    int cell_prow = prow + i;  // celle della fila precedente
-    if (init_grid.get_cell(cell_prow).get_state() == State::Infected) {
-      ++count;
+  for(int i{-1}; i <= 1; ++i){
+    for(int j{-1}; j <= 1; ++j){
+      if (init_grid.valid_coord(row + i, col + j) == true){
+        int index = (row + i) * g_side + (col + j);
+        if(init_grid.get_cell(index).get_state() == State::Infected){
+          ++count;
+        } 
+      }
     }
   }
 
-  for (int i{-1}; i <= 1; ++i) {
-    int cell_crow = pos + i;  // celle della fila in cui si trova pos
-    if (init_grid.get_cell(cell_crow).get_state() == State::Infected) {
-      ++count;
-    }
-  }
-
-  for (int i{-1}; i <= 1; ++i) {
-    int cell_srow = srow + i;  // celle della fila successiva
-    if (init_grid.get_cell(cell_srow).get_state() == State::Infected) {
-      ++count;
-    }
-  }
-
-  if (init_grid.get_cell(pos).get_state() == State::Infected) {
-    count += -1;
+  if(init_grid.get_cell(pos).get_state() == State::Infected){
+    count -= 1;
   }
 
   return count;
