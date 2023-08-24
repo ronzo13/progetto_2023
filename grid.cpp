@@ -34,7 +34,7 @@ void Grid::fill(double p_s, double p_i, Grid& init_grid) {
     std::uniform_int_distribution<> dist(0, (m_side * m_side) - 1);
     int random_num = dist(gen);
 
-    init_grid.get_cell(random_num).set_state(State::Susceptible);
+    init_grid.get_cell(random_num).set_cond(Cond::Susceptible);
   }
 
   // riempio caselle casuali della grigli con i suscettibili ottenuti dalla %
@@ -45,7 +45,7 @@ void Grid::fill(double p_s, double p_i, Grid& init_grid) {
     std::uniform_int_distribution<> dist(0, (m_side * m_side) - 1);
     int random_num = dist(gen);
 
-    init_grid.get_cell(random_num).set_state(State::Infected);
+    init_grid.get_cell(random_num).set_cond(Cond::Infected);
   }
 }
 
@@ -67,26 +67,26 @@ int Grid::inf_neigh(Grid const& init_grid, int pos) const {
 
   for (int i{-1}; i <= 1; ++i) {
     int cell_prow = prow + i;  // celle della fila precedente
-    if (init_grid.get_cell(cell_prow).get_state() == State::Infected) {
+    if (init_grid.get_cell(cell_prow).get_cond() == Cond::Infected) {
       ++count;
     }
   }
 
   for (int i{-1}; i <= 1; ++i) {
     int cell_crow = pos + i;  // celle della fila in cui si trova pos
-    if (init_grid.get_cell(cell_crow).get_state() == State::Infected) {
+    if (init_grid.get_cell(cell_crow).get_cond() == Cond::Infected) {
       ++count;
     }
   }
 
   for (int i{-1}; i <= 1; ++i) {
     int cell_srow = srow + i;  // celle della fila successiva
-    if (init_grid.get_cell(cell_srow).get_state() == State::Infected) {
+    if (init_grid.get_cell(cell_srow).get_cond() == Cond::Infected) {
       ++count;
     }
   }
 
-  if (init_grid.get_cell(pos).get_state() == State::Infected) {
+  if (init_grid.get_cell(pos).get_cond() == Cond::Infected) {
     count += -1;
   }
 
@@ -100,30 +100,30 @@ Grid Grid::evolution(Grid const& init_grid, double beta, double gamma) {
 
   // infection and removal rules
   for (int j{}; j < side * side; ++j) {
-    State i_person = init_grid.get_cell(j).get_state();
+    Cond i_person = init_grid.get_cell(j).get_cond();
 
     switch (i_person) {
-      case State::Susceptible: {
+      case Cond::Susceptible: {
         double const p_i = 1.0 - pow(1.0 - beta, inf_neigh(init_grid, j));
         assert(p_i >= 0 && p_i <= 1);
         if (random_value() < p_i) {
-          next_grid.get_cell(j).set_state(State::Infected);
+          next_grid.get_cell(j).set_cond(Cond::Infected);
         } else {
-          next_grid.get_cell(j).set_state(State::Susceptible);
+          next_grid.get_cell(j).set_cond(Cond::Susceptible);
         }
       } break;
-      case State::Infected: {
+      case Cond::Infected: {
         if (random_value() < gamma) {
-          next_grid.get_cell(j).set_state(State::Removed);
+          next_grid.get_cell(j).set_cond(Cond::Removed);
         } else {
-          next_grid.get_cell(j).set_state(State::Infected);
+          next_grid.get_cell(j).set_cond(Cond::Infected);
         }
       } break;
-      case State::Removed: {
-        next_grid.get_cell(j).set_state(State::Removed);
+      case Cond::Removed: {
+        next_grid.get_cell(j).set_cond(Cond::Removed);
       } break;
-      case State::Void: {
-        next_grid.get_cell(j).set_state(State::Void);
+      case Cond::Void: {
+        next_grid.get_cell(j).set_cond(Cond::Void);
       } break;
     }
   }
@@ -133,20 +133,20 @@ Grid Grid::evolution(Grid const& init_grid, double beta, double gamma) {
 int Grid::count_s() const {
   return std::accumulate(
       m_cells.begin(), m_cells.end(), 0, [](int sum, const Cell& cell) {
-        return sum + (cell.get_state() == State::Susceptible ? 1 : 0);
+        return sum + (cell.get_cond() == Cond::Susceptible ? 1 : 0);
       });
 }
 
 int Grid::count_i() const {
   return std::accumulate(
       m_cells.begin(), m_cells.end(), 0, [](int sum, const Cell& cell) {
-        return sum + (cell.get_state() == State::Infected ? 1 : 0);
+        return sum + (cell.get_cond() == Cond::Infected ? 1 : 0);
       });
 }
 
 int Grid::count_r() const {
   return std::accumulate(
       m_cells.begin(), m_cells.end(), 0, [](int sum, const Cell& cell) {
-        return sum + (cell.get_state() == State::Removed ? 1 : 0);
+        return sum + (cell.get_cond() == Cond::Removed ? 1 : 0);
       });
 }

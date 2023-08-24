@@ -3,6 +3,8 @@
 
 #include "cell.hpp"
 #include "grid.hpp"
+#include "sir.hpp"
+#include "validate_input.hpp"
 
 int main() {
   int side;
@@ -10,12 +12,14 @@ int main() {
   std::cin >> side;
   Grid my_grid{side};
 
-  double your_ps;
-  double your_pi;
-  std::cout << "Percentage of susceptible people you want - between ]0;1[: \n";
-  std::cin >> your_ps;
-  std::cout << "Percentage of infected people you want - between ]0;1[: \n";
-  std::cin >> your_pi;
+  Param param{};
+  param.beta = valid_beta();
+  param.gamma = valid_gamma();
+
+  valid_R0(param);
+
+  double your_ps = valid_S_percentage();
+  double your_pi = valid_I_percentage();
 
   int n_s = side * side * your_ps;  // non metto static_cast<int> perchè con int
                                     // la conversione è forzata
@@ -27,42 +31,41 @@ int main() {
     std::cout << "\n";
     for (int j{0}; j < side; ++j) {
       int cell = i * side + j;
-      if (my_grid.get_cell(cell).get_state() == State::Susceptible) {
+      if (my_grid.get_cell(cell).get_cond() == Cond::Susceptible) {
         std::cout << " S ";
       }
-      if (my_grid.get_cell(cell).get_state() == State::Infected) {
+      if (my_grid.get_cell(cell).get_cond() == Cond::Infected) {
         std::cout << " I ";
       }
-      if (my_grid.get_cell(cell).get_state() == State::Removed) {
+      if (my_grid.get_cell(cell).get_cond() == Cond::Removed) {
         std::cout << " R ";
       }
-      if (my_grid.get_cell(cell).get_state() == State::Void) {
+      if (my_grid.get_cell(cell).get_cond() == Cond::Void) {
         std::cout << " □ ";
       }
     }
   }
-  double beta{0.5};
-  double gamma{0.2};
+
   int days{3};
   for (int i{}; i < days; ++i) {
     std::cout << '\n';
     std::cout << "---------------------------";
     Grid new_grid = my_grid;
-    new_grid.evolution(my_grid, beta, gamma);
+    new_grid.evolution(my_grid, param.beta, param.gamma);
     for (int i{0}; i < side; ++i) {
       std::cout << "\n";
       for (int j{0}; j < side; ++j) {
         int cell = i * side + j;
-        if (new_grid.get_cell(cell).get_state() == State::Susceptible) {
+        if (new_grid.get_cell(cell).get_cond() == Cond::Susceptible) {
           std::cout << " S ";
         }
-        if (new_grid.get_cell(cell).get_state() == State::Infected) {
+        if (new_grid.get_cell(cell).get_cond() == Cond::Infected) {
           std::cout << " I ";
         }
-        if (new_grid.get_cell(cell).get_state() == State::Removed) {
+        if (new_grid.get_cell(cell).get_cond() == Cond::Removed) {
           std::cout << " R ";
         }
-        if (new_grid.get_cell(cell).get_state() == State::Void) {
+        if (new_grid.get_cell(cell).get_cond() == Cond::Void) {
           std::cout << " □ ";
         }
       }

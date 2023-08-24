@@ -1,18 +1,20 @@
 #ifndef CELL_HPP
 #define CELL_HPP
 
-enum class State { Susceptible, Infected, Removed, Void };
+enum class Condition { Susceptible, Infected, Removed, Void };
+
+using Cond = Condition;
 
 class Cell {
  private:
-  State m_state{};
+  Cond m_cond;
 
  public:
   Cell();
-  Cell(State const&);
+  Cell(Cond const&);
 
-  State get_state() const;        // ritorna lo stato di una cella
-  State set_state(State const&);  // assegna il nuovo stato a una cella
+  Cond get_cond() const;       // ritorna lo stato di una cella
+  Cond set_cond(Cond const&);  // assegna il nuovo stato a una cella
 };
 
 #endif
