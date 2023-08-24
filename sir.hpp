@@ -13,15 +13,14 @@ struct State {
   double i{};
   double r{};
 
-  State() = default;
   State(int, int, int);
 };
 
 class SIR {
  private:
   int m_total{};
-  State m_state{};
-  Param m_par{};
+  State m_state;
+  Param m_par;
 
  public:
   SIR(State const&, Param const&);
