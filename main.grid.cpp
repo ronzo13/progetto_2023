@@ -12,14 +12,12 @@ int main() {
   std::cin >> side;
   Grid my_grid{side};
 
-  Param param{};
-  param.beta = valid_beta();
-  param.gamma = valid_gamma();
-
-  valid_R0(param);
-
-  double your_ps = valid_S_percentage();
-  double your_pi = valid_I_percentage();
+  double your_ps;
+  double your_pi;
+  std::cout << "Percentage of susceptible people you want - between ]0;1[: \n";
+  std::cin >> your_ps;
+  std::cout << "Percentage of infected people you want - between ]0;1[: \n";
+  std::cin >> your_pi;
 
   int n_s = side * side * your_ps;  // non metto static_cast<int> perchè con int
                                     // la conversione è forzata
@@ -45,6 +43,8 @@ int main() {
       }
     }
   }
+
+  Param param{0.6, 0.3};
 
   int days{3};
   for (int i{}; i < days; ++i) {
