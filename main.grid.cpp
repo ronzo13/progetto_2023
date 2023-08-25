@@ -13,14 +13,15 @@ int main() {
   std::cin >> side;
   Grid my_grid{side};
 
-  double your_ps;
-  double your_pi;
+  double s_percentage;
+  double i_percentage;
   std::cout << "Percentage of susceptible people you want - between ]0;1[: \n";
-  std::cin >> your_ps;
+  std::cin >> s_percentage;
   std::cout << "Percentage of infected people you want - between ]0;1[: \n";
-  std::cin >> your_pi;
-
-  my_grid.fill(your_ps, your_pi);
+  std::cin >> i_percentage;
+  int s = s_percentage * side * side;
+  int i = i_percentage * side * side;
+  my_grid.fill(s, i);
 
   for (int i{0}; i < side; ++i) {
     std::cout << "\n";
@@ -50,7 +51,7 @@ int main() {
   std::cout << "Number of R: " << R << '\n';
   std::cout << "Number of Void: " << voids << '\n';
 
-  Param param{0.4, 0.3};
+  Param param{0.7, 0.2};
 
   int days{10};
   for (int i{}; i < days; ++i) {
