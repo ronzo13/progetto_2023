@@ -25,9 +25,9 @@ class SIR {
  public:
   SIR(State const&, Param const&);
 
-  std::vector<State> evolve(int days);
-
   int get_total() const;
+
+  std::vector<State> evolve(int days);
 };
 
 bool operator==(State const&, State const&);

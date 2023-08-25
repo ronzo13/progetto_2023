@@ -29,6 +29,7 @@ if (BUILD_TESTING)
   add_executable(sir.t sir.test.cpp sir.cpp)
   # aggiungi l'eseguibile statistics.t alla lista dei test
   add_test(NAME sir.t COMMAND sir.t)
-
+  add_executable(grid.t grid.test.cpp grid.cpp cell.cpp)
+  add_test(NAME grid.t COMMAND grid.t)
 endif()
 
