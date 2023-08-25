@@ -51,9 +51,14 @@ int main() {
   std::cout << "Number of R: " << R << '\n';
   std::cout << "Number of Void: " << voids << '\n';
 
-  Param param{0.7, 0.2};
+  Param param{};
+  int days{};
 
-  int days{10};
+  std::cout << "Insert how many days you want the epidemic lasts: \n";
+  std::cin >> days;
+  std::cout << "Insert beta and gamma parameters: \n";
+  std::cin >> param.beta >> param.gamma;
+
   for (int i{}; i < days; ++i) {
     std::cout << '\n';
     std::cout << "---------------------------";
