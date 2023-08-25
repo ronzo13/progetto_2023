@@ -4,6 +4,30 @@
 
 #include "doctest.h"
 
+TEST_CASE("Testing basics") {
+  SUBCASE("Testing the get_total() function") {
+    Param param{0.7, 0.2};
+    State state{93, 7, 0};
+    SIR sir{state, param};
+
+    CHECK(sir.get_total() == 100);
+  }
+
+  SUBCASE("Testing the operator == for equal states") {
+    State state_one{100, 25, 0};
+    State state_two{100, 25, 0};
+
+    CHECK((state_one == state_two) == true);
+  }
+
+  SUBCASE("Testing the operator == for different states") {
+    State state_one{100, 25, 0};
+    State state_two{115, 25, 0};
+
+    CHECK((state_one == state_two) == false);
+  }
+}
+
 TEST_CASE("Testing the class handling the evolution of a sir status") {
   SUBCASE("0 day") {
     Param param{0.7, 0.2};
