@@ -1,5 +1,6 @@
 #include "grid.hpp"
 
+#include <algorithm>
 #include <cassert>
 #include <cmath>
 #include <iostream>
@@ -11,66 +12,58 @@ Grid::Grid(int side) : m_side{side}, m_cells(side * side) {}
 
 int Grid::get_side() const { return m_side; }
 
-Cell& Grid::get_cell(int pos) {  // referenza modificabile a una cella
-  assert(pos >= 0 && pos < m_side * m_side);
-  return m_cells[pos];
+Cell& Grid::get_cell(int cell_pos) {  // referenza modificabile a una cella
+  assert(cell_pos >= 0 && cell_pos < m_side * m_side);
+  return m_cells[cell_pos];
 }
 
 Cell const& Grid::get_cell(
-    int pos) const {  // referenza non modificabile a una cella
-  assert(pos >= 0 && pos < m_side * m_side);
-  return m_cells[pos];
+    int cell_pos) const {  // referenza non modificabile a una cella
+  assert(cell_pos >= 0 && cell_pos < m_side * m_side);
+  return m_cells[cell_pos];
+}
+
+int Grid::count_s() const {
+  return std::accumulate(
+      m_cells.begin(), m_cells.end(), 0, [](int sum, const Cell& cell) {
+        return sum + (cell.get_condition() == Condition::Susceptible ? 1 : 0);
+      });
+}
+
+int Grid::count_i() const {
+  return std::accumulate(
+      m_cells.begin(), m_cells.end(), 0, [](int sum, const Cell& cell) {
+        return sum + (cell.get_condition() == Condition::Infected ? 1 : 0);
+      });
+}
+
+int Grid::count_r() const {
+  return std::accumulate(
+      m_cells.begin(), m_cells.end(), 0, [](int sum, const Cell& cell) {
+        return sum + (cell.get_condition() == Condition::Removed ? 1 : 0);
+      });
 }
 
 bool Grid::valid_coord(int row, int col) const {
   return row >= 0 && row < m_side && col >= 0 && col < m_side;
 }
 
-int Grid::random_cell() const {
-  std::random_device rd;
-  std::default_random_engine gen(rd());
-  std::uniform_int_distribution<> dist(0, (m_side * m_side) - 1);
-  int cell_pos = dist(gen);
-  return cell_pos;
-};
+void Grid::fill(int s, int i) {
+    std::fill(m_cells.begin(), m_cells.begin() + s, Condition::Susceptible);
 
-void Grid::fill(double p_s, double p_i) {
-  // riempio caselle casuali della grigli con i suscettibili ottenuti dalla %
-  // inserita
-  int s = m_side * m_side * p_s;
-  int i = m_side * m_side * p_i;
-  for (int j{0}; j < s; ++j) {
-    int random_num = Grid::random_cell();
-    get_cell(random_num).set_condition(Condition::Susceptible);
-  }
+  std::fill(m_cells.begin() + s, m_cells.begin() + s + i, Condition::Infected);
 
-  // riempio caselle casuali della grigli con i suscettibili ottenuti dalla %
-  // inserita
-  for (int j{0}; j < i; ++j) {
-    std::random_device rd;
-    std::default_random_engine gen(rd());
-    std::uniform_int_distribution<> dist(0, (m_side * m_side) - 1);
-    int random_num = dist(gen);
-
-    get_cell(random_num).set_condition(Condition::Infected);
-  }
-}
-
-double Grid::random_value() const {
   std::random_device rd;
   std::default_random_engine generator(rd());
-  std::uniform_real_distribution<double> distribution(0.0, 1.0);
-  double random_n = distribution(generator);
-
-  return random_n;
+  std::shuffle(m_cells.begin(), m_cells.end(), generator);
 }
 
-int Grid::inf_neigh(int pos) const {
+int Grid::inf_neigh(int cell_pos) const {
   int count{};
   int g_side = get_side();
-  assert(pos >= 0 && pos < g_side * g_side);
-  int row = pos / g_side;
-  int col = pos % g_side;
+  assert(cell_pos >= 0 && cell_pos < g_side * g_side);
+  int row = cell_pos / g_side;
+  int col = cell_pos % g_side;
 
   for (int i{-1}; i <= 1; ++i) {
     for (int j{-1}; j <= 1; ++j) {
@@ -83,7 +76,7 @@ int Grid::inf_neigh(int pos) const {
     }
   }
 
-  if (get_cell(pos).get_condition() == Condition::Infected) {
+  if (get_cell(cell_pos).get_condition() == Condition::Infected) {
     count -= 1;
   }
 
@@ -127,23 +120,11 @@ Grid Grid::evolution(double beta, double gamma) {
   return next_grid;
 }
 
-int Grid::count_s() const {
-  return std::accumulate(
-      m_cells.begin(), m_cells.end(), 0, [](int sum, const Cell& cell) {
-        return sum + (cell.get_condition() == Condition::Susceptible ? 1 : 0);
-      });
-}
+double random_value() {
+  std::random_device rd;
+  std::default_random_engine generator(rd());
+  std::uniform_real_distribution<double> distribution(0.0, 1.0);
+  double random_n = distribution(generator);
 
-int Grid::count_i() const {
-  return std::accumulate(
-      m_cells.begin(), m_cells.end(), 0, [](int sum, const Cell& cell) {
-        return sum + (cell.get_condition() == Condition::Infected ? 1 : 0);
-      });
-}
-
-int Grid::count_r() const {
-  return std::accumulate(
-      m_cells.begin(), m_cells.end(), 0, [](int sum, const Cell& cell) {
-        return sum + (cell.get_condition() == Condition::Removed ? 1 : 0);
-      });
+  return random_n;
 }
