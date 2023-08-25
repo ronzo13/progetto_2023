@@ -19,14 +19,16 @@ class Grid {
   Cell const& get_cell(int) const;  // ritorna referenza costante a una cella
 
   bool valid_coord(int, int) const;
-  
-  void fill(double, double, Grid&);
 
-  int inf_neigh(Grid const&, int) const;
+  void fill(double, double);
+
+  int inf_neigh(int) const;
 
   double random_value() const;
 
-  Grid evolution(Grid const&, double, double);
+  int random_cell() const;
+
+  Grid evolution(double, double);
 
   int count_s() const;
   int count_i() const;

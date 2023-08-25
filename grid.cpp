@@ -22,23 +22,26 @@ Cell const& Grid::get_cell(
   return m_cells[pos];
 }
 
-bool Grid::valid_coord(int row, int col) const{
+bool Grid::valid_coord(int row, int col) const {
   return row >= 0 && row < m_side && col >= 0 && col < m_side;
 }
 
-void Grid::fill(double p_s, double p_i, Grid& init_grid) {
+int Grid::random_cell() const {
+  std::random_device rd;
+  std::default_random_engine gen(rd());
+  std::uniform_int_distribution<> dist(0, (m_side * m_side) - 1);
+  int cell_pos = dist(gen);
+  return cell_pos;
+};
+
+void Grid::fill(double p_s, double p_i) {
   // riempio caselle casuali della grigli con i suscettibili ottenuti dalla %
   // inserita
   int s = m_side * m_side * p_s;
   int i = m_side * m_side * p_i;
-
   for (int j{0}; j < s; ++j) {
-    std::random_device rd;
-    std::default_random_engine gen(rd());
-    std::uniform_int_distribution<> dist(0, (m_side * m_side) - 1);
-    int random_num = dist(gen);
-
-    init_grid.get_cell(random_num).set_cond(Cond::Susceptible);
+    int random_num = Grid::random_cell();
+    get_cell(random_num).set_condition(Condition::Susceptible);
   }
 
   // riempio caselle casuali della grigli con i suscettibili ottenuti dalla %
@@ -49,7 +52,7 @@ void Grid::fill(double p_s, double p_i, Grid& init_grid) {
     std::uniform_int_distribution<> dist(0, (m_side * m_side) - 1);
     int random_num = dist(gen);
 
-    init_grid.get_cell(random_num).set_cond(Cond::Infected);
+    get_cell(random_num).set_condition(Condition::Infected);
   }
 }
 
@@ -62,25 +65,25 @@ double Grid::random_value() const {
   return random_n;
 }
 
-int Grid::inf_neigh(Grid const& init_grid, int pos) const {
+int Grid::inf_neigh(int pos) const {
   int count{};
-  int g_side = init_grid.get_side();
+  int g_side = get_side();
   assert(pos >= 0 && pos < g_side * g_side);
   int row = pos / g_side;
   int col = pos % g_side;
 
-  for(int i{-1}; i <= 1; ++i){
-    for(int j{-1}; j <= 1; ++j){
-      if (init_grid.valid_coord(row + i, col + j) == true){
+  for (int i{-1}; i <= 1; ++i) {
+    for (int j{-1}; j <= 1; ++j) {
+      if (valid_coord(row + i, col + j) == true) {
         int index = (row + i) * g_side + (col + j);
-        if(init_grid.get_cell(index).get_cond() == Cond::Infected){
+        if (get_cell(index).get_condition() == Condition::Infected) {
           ++count;
-        } 
+        }
       }
     }
   }
 
-  if(init_grid.get_cell(pos).get_cond() == Cond::Infected){
+  if (get_cell(pos).get_condition() == Condition::Infected) {
     count -= 1;
   }
 
@@ -88,36 +91,36 @@ int Grid::inf_neigh(Grid const& init_grid, int pos) const {
 }
 
 // crea e ritorna la griglia successiva
-Grid Grid::evolution(Grid const& init_grid, double beta, double gamma) {
-  int const side = init_grid.get_side();
+Grid Grid::evolution(double beta, double gamma) {
+  int const side = get_side();
   Grid next_grid{side};
 
   // infection and removal rules
   for (int j{}; j < side * side; ++j) {
-    Cond i_person = init_grid.get_cell(j).get_cond();
+    Condition i_person = get_cell(j).get_condition();
 
     switch (i_person) {
-      case Cond::Susceptible: {
-        double const p_i = 1.0 - pow(1.0 - beta, inf_neigh(init_grid, j));
-        assert(p_i >= 0 && p_i <= 1);
-        if (random_value() < p_i) {
-          next_grid.get_cell(j).set_cond(Cond::Infected);
+      case Condition::Susceptible: {
+        double const prob_infection = 1.0 - pow(1.0 - beta, inf_neigh(j));
+        assert(prob_infection >= 0 && prob_infection <= 1);
+        if (random_value() < prob_infection) {
+          next_grid.get_cell(j).set_condition(Condition::Infected);
         } else {
-          next_grid.get_cell(j).set_cond(Cond::Susceptible);
+          next_grid.get_cell(j).set_condition(Condition::Susceptible);
         }
       } break;
-      case Cond::Infected: {
+      case Condition::Infected: {
         if (random_value() < gamma) {
-          next_grid.get_cell(j).set_cond(Cond::Removed);
+          next_grid.get_cell(j).set_condition(Condition::Removed);
         } else {
-          next_grid.get_cell(j).set_cond(Cond::Infected);
+          next_grid.get_cell(j).set_condition(Condition::Infected);
         }
       } break;
-      case Cond::Removed: {
-        next_grid.get_cell(j).set_cond(Cond::Removed);
+      case Condition::Removed: {
+        next_grid.get_cell(j).set_condition(Condition::Removed);
       } break;
-      case Cond::Void: {
-        next_grid.get_cell(j).set_cond(Cond::Void);
+      case Condition::Void: {
+        next_grid.get_cell(j).set_condition(Condition::Void);
       } break;
     }
   }
@@ -127,20 +130,20 @@ Grid Grid::evolution(Grid const& init_grid, double beta, double gamma) {
 int Grid::count_s() const {
   return std::accumulate(
       m_cells.begin(), m_cells.end(), 0, [](int sum, const Cell& cell) {
-        return sum + (cell.get_cond() == Cond::Susceptible ? 1 : 0);
+        return sum + (cell.get_condition() == Condition::Susceptible ? 1 : 0);
       });
 }
 
 int Grid::count_i() const {
   return std::accumulate(
       m_cells.begin(), m_cells.end(), 0, [](int sum, const Cell& cell) {
-        return sum + (cell.get_cond() == Cond::Infected ? 1 : 0);
+        return sum + (cell.get_condition() == Condition::Infected ? 1 : 0);
       });
 }
 
 int Grid::count_r() const {
   return std::accumulate(
       m_cells.begin(), m_cells.end(), 0, [](int sum, const Cell& cell) {
-        return sum + (cell.get_cond() == Cond::Removed ? 1 : 0);
+        return sum + (cell.get_condition() == Condition::Removed ? 1 : 0);
       });
 }
