@@ -2,13 +2,14 @@
 #define GRAPHICS_HPP
 
 #include <SFML/Graphics.hpp>
+#include "grid.hpp"
 
 class Graph{
     private:
     sf::RenderWindow& m_window;
 
     public:
-    void draw(Grid const&){}
+    void draw_grid(Grid const&);
 };
 
 #endif

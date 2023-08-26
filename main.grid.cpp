@@ -8,6 +8,7 @@
 #include "grid.hpp"
 #include "sir.hpp"
 #include "validate_input.hpp"
+#include "graphics.hpp"
 
 int main() {
   int side;
@@ -25,7 +26,6 @@ int main() {
   int i = i_percentage * side * side;
   my_grid.fill(s, i);
 
-  //display the evolution of the epidemic with days and param chosen by user
   int S = my_grid.count_s();
   int I = my_grid.count_i();
   int R = my_grid.count_r();
@@ -36,6 +36,7 @@ int main() {
   std::cout << "Initial number of R: " << R << '\n';
   std::cout << "Initial number of Void: " << voids << '\n';
 
+  //display the evolution of the epidemic with days and param chosen by user
   Param param{};
   int days{};
 
@@ -46,64 +47,33 @@ int main() {
 
   //Initialize SFML
   sf::RenderWindow window(sf::VideoMode(800, 600), "Epidemic Simulation");
-
   Graph graphic_part(window);
-  
 
-
-
-
-  /*
-    for (int i{0}; i < side; ++i) {
-      std::cout << "\n";
-      for (int j{0}; j < side; ++j) {
-        int cell = i * side + j;
-        if (my_grid.get_cell(cell).get_condition() == Condition::Susceptible) {
-          std::cout << " S ";
-        }
-        if (my_grid.get_cell(cell).get_condition() == Condition::Infected) {
-          std::cout << " I ";
-        }
-        if (my_grid.get_cell(cell).get_condition() == Condition::Removed) {
-          std::cout << " R ";
-        }
-        if (my_grid.get_cell(cell).get_condition() == Condition::Void) {
-          std::cout << " □ ";
-        }
+  while (window.isOpen()){
+    sf::Event event;
+    while(window.PollEvent(event)){
+      if(event.type == sf::Event::Closed){
+        window.close();
       }
     }
-    */
+  }
 
+  window.clear(sf::Color::White);
 
+  graphic_part.draw_graphic(my_grid);
 
+  window.display();
 
   for (int i{}; i < days; ++i) {
-    std::cout << '\n';
-    std::cout << "---------------------------";
-
     Grid new_grid = my_grid.evolution(param.beta, param.gamma);
     assert(my_grid.count_r() <= new_grid.count_r());
     my_grid = new_grid;
-    /*
-        for (int i{0}; i < side; ++i) {
-          std::cout << "\n";
-          for (int j{0}; j < side; ++j) {
-            int cell = i * side + j;
-            if (new_grid.get_cell(cell).get_condition() ==
-       Condition::Susceptible) { std::cout << " S ";
-            }
-            if (new_grid.get_cell(cell).get_condition() == Condition::Infected)
-       { std::cout << " I ";
-            }
-            if (new_grid.get_cell(cell).get_condition() == Condition::Removed) {
-              std::cout << " R ";
-            }
-            if (new_grid.get_cell(cell).get_condition() == Condition::Void) {
-              std::cout << " □ ";
-            }
-          }
-        }
-        */
+
+    window.clear(sf::Color::White);
+
+    //draw the updated grid
+    graphic_part.draw_graphic(new_grid);
+  
     int S_ = new_grid.count_s();
     int I_ = new_grid.count_i();
     int R_ = new_grid.count_r();
