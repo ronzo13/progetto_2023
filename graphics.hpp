@@ -1,15 +1,18 @@
+#include <SFML/Graphics.hpp>
+
+#include "grid.hpp"
+
 #ifndef GRAPHICS_HPP
 #define GRAPHICS_HPP
 
-#include <SFML/Graphics.hpp>
-#include "grid.hpp"
+class Graph {
+ private:
+  sf::RenderWindow& m_window;  // perché & ?
 
-class Graph{
-    private:
-    sf::RenderWindow& m_window;
+ public:
+  Graph(sf::RenderWindow&);
 
-    public:
-    void draw_grid(Grid const&);
+  void draw_grid(Grid const&);
 };
 
 #endif
