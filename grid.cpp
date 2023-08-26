@@ -90,9 +90,9 @@ Grid Grid::evolution(double beta, double gamma) {
 
   // infection and removal rules
   for (int j{}; j < side * side; ++j) {
-    Condition i_person = get_cell(j).get_condition();
+    Condition person = get_cell(j).get_condition();
 
-    switch (i_person) {
+    switch (person) {
       case Condition::Susceptible: {
         double const prob_infection = 1.0 - pow(1.0 - beta, inf_neigh(j));
         assert(prob_infection >= 0 && prob_infection <= 1);
