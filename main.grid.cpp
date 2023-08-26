@@ -1,3 +1,5 @@
+#include <SFML/Graphics.hpp>
+
 #include <cassert>
 #include <iostream>
 #include <random>
@@ -15,13 +17,42 @@ int main() {
 
   double s_percentage;
   double i_percentage;
-  std::cout << "Percentage of susceptible people you want - between ]0;1[: \n";
+  std::cout << "Percentage of susceptible people you want - between ]0; 1[: \n";
   std::cin >> s_percentage;
-  std::cout << "Percentage of infected people you want - between ]0;1[: \n";
+  std::cout << "Percentage of infected people you want - between ]0; 1[: \n";
   std::cin >> i_percentage;
   int s = s_percentage * side * side;
   int i = i_percentage * side * side;
   my_grid.fill(s, i);
+
+  //display the evolution of the epidemic with days and param chosen by user
+  int S = my_grid.count_s();
+  int I = my_grid.count_i();
+  int R = my_grid.count_r();
+  int voids = side * side - (S + I + R);
+  std::cout << "\n";
+  std::cout << "Initial number of S: " << S << '\n';
+  std::cout << "Initial number of I: " << I << '\n';
+  std::cout << "Initial number of R: " << R << '\n';
+  std::cout << "Initial number of Void: " << voids << '\n';
+
+  Param param{};
+  int days{};
+
+  std::cout << "Insert how many days you want the epidemic lasts: \n";
+  std::cin >> days;
+  std::cout << "Insert beta and gamma parameters: \n";
+  std::cin >> param.beta >> param.gamma;
+
+  //Initialize SFML
+  sf::RenderWindow window(sf::VideoMode(800, 600), "Epidemic Simulation");
+
+  Graph graphic_part(window);
+  
+
+
+
+
   /*
     for (int i{0}; i < side; ++i) {
       std::cout << "\n";
@@ -42,23 +73,9 @@ int main() {
       }
     }
     */
-  int S = my_grid.count_s();
-  int I = my_grid.count_i();
-  int R = my_grid.count_r();
-  int voids = side * side - (S + I + R);
-  std::cout << "\n";
-  std::cout << "Number of S: " << S << '\n';
-  std::cout << "Number of I: " << I << '\n';
-  std::cout << "Number of R: " << R << '\n';
-  std::cout << "Number of Void: " << voids << '\n';
 
-  Param param{};
-  int days{};
 
-  std::cout << "Insert how many days you want the epidemic lasts: \n";
-  std::cin >> days;
-  std::cout << "Insert beta and gamma parameters: \n";
-  std::cin >> param.beta >> param.gamma;
+
 
   for (int i{}; i < days; ++i) {
     std::cout << '\n';
@@ -98,6 +115,9 @@ int main() {
     std::cout << "Number of R: " << R_ << '\n';
     std::cout << "Number of Void: " << voids << '\n';
   }
+
+  //comparing what would happen with the same values following
+  //the implementation of the simulation of the first part
   State state{s, i, 0};
   SIR sir{state, param};
   auto epidemic = sir.evolve(days);
