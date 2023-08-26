@@ -1,14 +1,13 @@
 #include <SFML/Graphics.hpp>
-
 #include <cassert>
 #include <iostream>
 #include <random>
 
 #include "cell.hpp"
+#include "graphics.hpp"
 #include "grid.hpp"
 #include "sir.hpp"
 #include "validate_input.hpp"
-#include "graphics.hpp"
 
 int main() {
   int side;
@@ -36,7 +35,7 @@ int main() {
   std::cout << "Initial number of R: " << R << '\n';
   std::cout << "Initial number of Void: " << voids << '\n';
 
-  //display the evolution of the epidemic with days and param chosen by user
+  // display the evolution of the epidemic with days and param chosen by user
   Param param{};
   int days{};
 
@@ -45,49 +44,55 @@ int main() {
   std::cout << "Insert beta and gamma parameters: \n";
   std::cin >> param.beta >> param.gamma;
 
-  //Initialize SFML
+  // Initialize SFML
   sf::RenderWindow window(sf::VideoMode(800, 600), "Epidemic Simulation");
   Graph graphic_part(window);
 
-  while (window.isOpen()){
+  bool finish_evolution = false;
+  while (window.isOpen() && !finish_evolution) {
     sf::Event event;
-    while(window.PollEvent(event)){
-      if(event.type == sf::Event::Closed){
+    while (window.pollEvent(event)) {
+      if (event.type == sf::Event::Closed) {
         window.close();
       }
     }
-  }
-
-  window.clear(sf::Color::White);
-
-  graphic_part.draw_graphic(my_grid);
-
-  window.display();
-
-  for (int i{}; i < days; ++i) {
-    Grid new_grid = my_grid.evolution(param.beta, param.gamma);
-    assert(my_grid.count_r() <= new_grid.count_r());
-    my_grid = new_grid;
 
     window.clear(sf::Color::White);
 
-    //draw the updated grid
-    graphic_part.draw_graphic(new_grid);
-  
-    int S_ = new_grid.count_s();
-    int I_ = new_grid.count_i();
-    int R_ = new_grid.count_r();
-    int voids = side * side - (S + I + R);
-    std::cout << "\n";
-    std::cout << "day: " << i + 1 << '\n';
-    std::cout << "Number of S: " << S_ << '\n';
-    std::cout << "Number of I: " << I_ << '\n';
-    std::cout << "Number of R: " << R_ << '\n';
-    std::cout << "Number of Void: " << voids << '\n';
-  }
+    graphic_part.draw_grid(my_grid);
 
-  //comparing what would happen with the same values following
-  //the implementation of the simulation of the first part
+    window.display();
+    // display 5 seconds
+    sf::sleep(sf::milliseconds(5000));
+    
+    for (int i{}; i < days; ++i) {
+      Grid new_grid = my_grid.evolution(param.beta, param.gamma);
+      assert(my_grid.count_r() <= new_grid.count_r());
+      my_grid = new_grid;
+
+      window.clear(sf::Color::White);
+
+      // draw the updated grid
+      graphic_part.draw_grid(new_grid);
+
+      int S_ = new_grid.count_s();
+      int I_ = new_grid.count_i();
+      int R_ = new_grid.count_r();
+      int voids = side * side - (S + I + R);
+      std::cout << "\n";
+      std::cout << "day: " << i + 1 << '\n';
+      std::cout << "Number of S: " << S_ << '\n';
+      std::cout << "Number of I: " << I_ << '\n';
+      std::cout << "Number of R: " << R_ << '\n';
+      std::cout << "Number of Void: " << voids << '\n';
+
+      if (i == days - 1 || new_grid.count_r() == 0) {
+        finish_evolution = true;
+      }
+    }
+  }
+  // comparing what would happen with the same values following
+  // the implementation of the simulation of the first part
   State state{s, i, 0};
   SIR sir{state, param};
   auto epidemic = sir.evolve(days);
