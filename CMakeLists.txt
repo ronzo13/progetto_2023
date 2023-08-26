@@ -19,7 +19,7 @@ string(APPEND CMAKE_CXX_FLAGS_DEBUG " -fsanitize=address,undefined -fno-omit-fra
 string(APPEND CMAKE_EXE_LINKER_FLAGS_DEBUG " -fsanitize=address,undefined -fno-omit-frame-pointer")
 
 add_executable(sir main.cpp sir.cpp validate_input.cpp)
-add_executable(grid main.grid.cpp grid.cpp cell.cpp validate_input.cpp)
+add_executable(grid main.grid.cpp sir.cpp grid.cpp cell.cpp validate_input.cpp)
 
 # se il testing e' abilitato...
 #   per disabilitare il testing, passare -DBUILD_TESTING=OFF a cmake durante la fase di configurazione

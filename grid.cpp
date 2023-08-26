@@ -49,7 +49,7 @@ bool Grid::valid_coord(int row, int col) const {
 }
 
 void Grid::fill(int s, int i) {
-    std::fill(m_cells.begin(), m_cells.begin() + s, Condition::Susceptible);
+  std::fill(m_cells.begin(), m_cells.begin() + s, Condition::Susceptible);
 
   std::fill(m_cells.begin() + s, m_cells.begin() + s + i, Condition::Infected);
 
@@ -65,8 +65,8 @@ int Grid::inf_neigh(int cell_pos) const {
   int row = cell_pos / g_side;
   int col = cell_pos % g_side;
 
-  for (int i{-1}; i <= 1; ++i) {
-    for (int j{-1}; j <= 1; ++j) {
+  for (int i : {-1, 0, 1}) {
+    for (int j : {-1, 0, 1}) {
       if (valid_coord(row + i, col + j) == true) {
         int index = (row + i) * g_side + (col + j);
         if (get_cell(index).get_condition() == Condition::Infected) {
