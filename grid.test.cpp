@@ -138,7 +138,7 @@ TEST_CASE("Testing the evolution function") {
       grid = new_grid;
     }
 
-    CHECK(grid.count_s() <= first_grid.count_s());
-    CHECK(grid.count_r() >= first_grid.count_r());
+    CHECK(grid.count_s() < first_grid.count_s());
+    CHECK(grid.count_r() > first_grid.count_r());
   }
 }
