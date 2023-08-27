@@ -11,6 +11,7 @@ void Graph::draw_grid(Grid const& grid) {
   float const cell_base = 800.0f / side;
   float const cell_height = 600.0f / side;
   sf::RectangleShape cell(sf::Vector2f(cell_base, cell_height));
+  cell.setOutlineThickness(1.f);
 
   for (int row{0}; row < side; ++row) {
     for (int col{0}; col < side; ++col) {

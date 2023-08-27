@@ -39,6 +39,7 @@ int main() {
   Param param{};
   int days{};
 
+  std::cout << "\n";
   std::cout << "Insert how many days you want the epidemic lasts: \n";
   std::cin >> days;
   std::cout << "Insert beta and gamma parameters: \n";
@@ -60,10 +61,9 @@ int main() {
     window.clear(sf::Color::White);
 
     graphic_part.draw_grid(my_grid);
-
     window.display();
     // display 5 seconds
-    sf::sleep(sf::milliseconds(5000));
+    sf::sleep(sf::milliseconds(1000));
     
     for (int i{}; i < days; ++i) {
       Grid new_grid = my_grid.evolution(param.beta, param.gamma);
@@ -74,6 +74,8 @@ int main() {
 
       // draw the updated grid
       graphic_part.draw_grid(new_grid);
+      window.display();
+      sf::sleep(sf::milliseconds(1000));
 
       int S_ = new_grid.count_s();
       int I_ = new_grid.count_i();
