@@ -117,7 +117,7 @@ TEST_CASE("Testing the fill function") {
 }
 
 TEST_CASE("Testing the evolution function") {
-  SUBCASE("#1") {
+  SUBCASE("After 1 day") {
     Grid grid{12};
     grid.fill(90, 4);
     double beta{0.3}, gamma{0.2};
@@ -127,18 +127,20 @@ TEST_CASE("Testing the evolution function") {
     CHECK(new_grid.count_r() >= grid.count_r());
   }
 
-  SUBCASE("#2") {
+  SUBCASE("After 10 days") {
     int days{10};
     Grid grid{10};
     grid.fill(75, 5);
     double beta{0.5}, gamma{0.3};
-    auto const& first_grid = grid;
+    auto first_grid = grid;
     for (int i{}; i < days; ++i) {
-      auto new_grid = grid.evolution(beta, gamma);
+      auto const& new_grid = grid.evolution(beta, gamma);
       grid = new_grid;
     }
 
     CHECK(grid.count_s() < first_grid.count_s());
     CHECK(grid.count_r() > first_grid.count_r());
+    CHECK(first_grid.count_s() == 75);
+    CHECK(first_grid.count_i() == 5);
   }
 }

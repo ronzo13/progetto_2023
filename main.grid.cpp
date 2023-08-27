@@ -62,9 +62,9 @@ int main() {
 
     graphic_part.draw_grid(my_grid);
     window.display();
-    // display 5 seconds
+
     sf::sleep(sf::milliseconds(1000));
-    
+
     for (int i{}; i < days; ++i) {
       Grid new_grid = my_grid.evolution(param.beta, param.gamma);
       assert(my_grid.count_r() <= new_grid.count_r());
@@ -93,8 +93,10 @@ int main() {
       }
     }
   }
-  // comparing what would happen with the same values following
-  // the implementation of the simulation of the first part
+
+  /*comparing what would happen with the same values following
+   * the implementation of the simulation of
+   *the first part */
   State state{s, i, 0};
   SIR sir{state, param};
   auto epidemic = sir.evolve(days);
