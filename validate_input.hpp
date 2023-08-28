@@ -7,7 +7,7 @@ double valid_beta();
 
 double valid_gamma();
 
-void valid_R0(Param&);
+void valid_R0(double&, double&);
 
 int valid_s();
 
@@ -17,8 +17,8 @@ int valid_r();
 
 int valid_days();
 
-double valid_S_percentage();
+int valid_side();
 
-double valid_I_percentage();
+void valid_SIR(int&, int&, int);
 
 #endif

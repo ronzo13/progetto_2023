@@ -8,7 +8,7 @@ int main() {
   param.beta = valid_beta();
   param.gamma = valid_gamma();
 
-  valid_R0(param);
+  valid_R0(param.beta, param.gamma);
 
   int s = valid_s();
   int i = valid_i();

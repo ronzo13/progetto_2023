@@ -1,56 +1,36 @@
 #include <SFML/Graphics.hpp>
-#include <cassert>
 #include <iostream>
-#include <random>
 
 #include "cell.hpp"
 #include "graphics.hpp"
 #include "grid.hpp"
-#include "sir.hpp"
 #include "validate_input.hpp"
 
 int main() {
-  int side;
-  std::cout << "Insert the side of the grid: \n";
-  std::cin >> side;
+  int side = valid_side();
   Grid my_grid{side};
-
-  double s_percentage;
-  double i_percentage;
-  std::cout << "Percentage of susceptible people you want - between ]0; 1[: \n";
-  std::cin >> s_percentage;
-  std::cout << "Percentage of infected people you want - between ]0; 1[: \n";
-  std::cin >> i_percentage;
-  int s = s_percentage * side * side;
-  int i = i_percentage * side * side;
+  std::cout << "The grid has a total of " << side * side << " cells" << '\n';
+  int s = valid_s();
+  int i = valid_i();
+  valid_SIR(s, i, side);
   my_grid.fill(s, i);
 
-  int S = my_grid.count_s();
-  int I = my_grid.count_i();
-  int R = my_grid.count_r();
-  int voids = side * side - (S + I + R);
-  std::cout << "\n";
-  std::cout << "Initial number of S: " << S << '\n';
-  std::cout << "Initial number of I: " << I << '\n';
-  std::cout << "Initial number of R: " << R << '\n';
-  std::cout << "Initial number of Void: " << voids << '\n';
+  std::cout << "Initial number of S: " << my_grid.count_s() << '\n';
+  std::cout << "Initial number of I: " << my_grid.count_i() << '\n';
+  std::cout << "Initial number of R: " << my_grid.count_r() << '\n';
+  std::cout << "Initial number of Void: " << my_grid.count_voids() << '\n';
 
   // display the evolution of the epidemic with days and param chosen by user
-  Param param{};
-  int days{};
-
-  std::cout << "\n";
-  std::cout << "Insert how many days you want the epidemic lasts: \n";
-  std::cin >> days;
-  std::cout << "Insert beta and gamma parameters: \n";
-  std::cin >> param.beta >> param.gamma;
+  double beta = valid_beta();
+  double gamma = valid_gamma();
+  valid_R0(beta, gamma);
+  int days = valid_days();
 
   // Initialize SFML
   sf::RenderWindow window(sf::VideoMode(800, 600), "Epidemic Simulation");
   Graph graphic_part(window);
 
-  bool finish_evolution = false;
-  while (window.isOpen() && !finish_evolution) {
+  while (window.isOpen()) {
     sf::Event event;
     while (window.pollEvent(event)) {
       if (event.type == sf::Event::Closed) {
@@ -62,12 +42,10 @@ int main() {
 
     graphic_part.draw_grid(my_grid);
     window.display();
-
-    sf::sleep(sf::milliseconds(1000));
+    sf::sleep(sf::seconds(1.5));
 
     for (int i{}; i < days; ++i) {
-      Grid new_grid = my_grid.evolution(param.beta, param.gamma);
-      assert(my_grid.count_r() <= new_grid.count_r());
+      Grid new_grid = my_grid.evolution(beta, gamma);
       my_grid = new_grid;
 
       window.clear(sf::Color::Black);
@@ -75,36 +53,13 @@ int main() {
       // draw the updated grid
       graphic_part.draw_grid(new_grid);
       window.display();
-      sf::sleep(sf::milliseconds(1000));
+      sf::sleep(sf::seconds(1.5));
 
-      int S_ = new_grid.count_s();
-      int I_ = new_grid.count_i();
-      int R_ = new_grid.count_r();
-      int voids = side * side - (S + I + R);
-      std::cout << "\n";
       std::cout << "day: " << i + 1 << '\n';
-      std::cout << "Number of S: " << S_ << '\n';
-      std::cout << "Number of I: " << I_ << '\n';
-      std::cout << "Number of R: " << R_ << '\n';
-      std::cout << "Number of Void: " << voids << '\n';
-
-      if (i == days - 1 || new_grid.count_r() == 0) {
-        finish_evolution = true;
-      }
+      std::cout << "Number of S: " << new_grid.count_s() << '\n';
+      std::cout << "Number of I: " << new_grid.count_i() << '\n';
+      std::cout << "Number of R: " << new_grid.count_r() << '\n';
+      std::cout << "Number of Void: " << new_grid.count_voids() << '\n';
     }
   }
-
-  /*comparing what would happen with the same values following
-   * the implementation of the simulation of
-   *the first part */
-  State state{s, i, 0};
-  SIR sir{state, param};
-  auto epidemic = sir.evolve(days);
-
-  int size = epidemic.size();
-  State last_state = epidemic.back();
-  std::cout << "First part S: " << last_state.s << '\n';
-  std::cout << "First part I: " << last_state.i << '\n';
-  std::cout << "First part R: " << last_state.r << '\n';
-  std::cout << "the epidemic lasts for: " << size - 1 << " days" << '\n';
 }

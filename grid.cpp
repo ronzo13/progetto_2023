@@ -44,6 +44,13 @@ int Grid::count_r() const {
       });
 }
 
+int Grid::count_voids() const {
+  return std::accumulate(
+      m_cells.begin(), m_cells.end(), 0, [](int sum, const Cell& cell) {
+        return sum + (cell.get_condition() == Condition::Void ? 1 : 0);
+      });
+}
+
 bool Grid::valid_coord(int row, int col) const {
   return row >= 0 && row < m_side && col >= 0 && col < m_side;
 }

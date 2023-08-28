@@ -79,12 +79,12 @@ double valid_gamma() {
 /*the function checks that R0 = beta/gamma
  *is greater than 1 fot the epidemic to
  * start*/
-void valid_R0(Param& par) {
-  while (par.beta <= par.gamma) {
+void valid_R0(double& beta, double& gamma) {
+  while (beta <= gamma) {
     std::cout << "Since beta < gamma the R0 index is less than 1" << '\n';
     std::cout << "Please insert beta greater than gamma" << '\n';
-    par.beta = valid_beta();
-    par.gamma = valid_gamma();
+    beta = valid_beta();
+    gamma = valid_gamma();
   }
   std::cout << "Since beta > gamma, R0 > 1, the epidemic starts" << '\n';
 }
@@ -210,68 +210,45 @@ int valid_days() {
   return new_days;
 }
 
-double valid_S_percentage() {
+int valid_side() {
   bool valid_input{false};
-  double p_s{};
+  int new_side{};
   while (!valid_input) {
-    std::cout << "S percentage: ";
+    std::cout << "grid side: ";
     std::string input;
     std::cin >> input;
     if (input.find(',') != std::string::npos) {
-      std::cout
-          << "Invalid value for S percentage. Please use a dot (.) as the "
-             "decimal separator."
-          << '\n';
+      std::cout << "Invalid value for grid side. Please use a dot (.) as the "
+                   "decimal separator."
+                << '\n';
       continue;
     }
     try {
-      double check_p_s = std::stod(input);
-      if (check_p_s >= 0 && check_p_s <= 1) {
-        p_s = check_p_s;
+      double check_side = std::stod(input);
+      if (check_side == static_cast<int>(check_side) && check_side >= 0) {
+        new_side = static_cast<int>(check_side);
         valid_input = true;
       } else {
-        std::cout << "Invalid value for S percentage. Please enter a number "
-                     "between 0 and 1."
+        std::cout << "Invalid value for grid side. Please enter a "
+                     "valid integer."
                   << '\n';
       }
     } catch (const std::invalid_argument& e) {
-      std::cout << "Invalid value for S percentage. Please enter a number "
-                   "between 0 and 1."
+      std::cout << "Invalid value for gird side. Please enter a valid "
+                   "integer."
                 << '\n';
     }
   }
-  return p_s;
+  return new_side;
 }
 
-double valid_I_percentage() {
-  bool valid_input{false};
-  double p_i{};
-  while (!valid_input) {
-    std::cout << "I percentage: ";
-    std::string input;
-    std::cin >> input;
-    if (input.find(',') != std::string::npos) {
-      std::cout
-          << "Invalid value for I percentage. Please use a dot (.) as the "
-             "decimal separator."
-          << '\n';
-      continue;
-    }
-    try {
-      double check_p_i = std::stod(input);
-      if (check_p_i >= 0 && check_p_i <= 1) {
-        p_i = check_p_i;
-        valid_input = true;
-      } else {
-        std::cout << "Invalid value for I percentage. Please enter a number "
-                     "between 0 and 1."
-                  << '\n';
-      }
-    } catch (const std::invalid_argument& e) {
-      std::cout << "Invalid value for I percentage. Please enter a number "
-                   "between 0 and 1."
-                << '\n';
-    }
+void valid_SIR(int& s, int& i, int side) {
+  while ((side * side) < (s + i)) {
+    std::cout << "Since (S + I) > (side*side) the grid cannot be filled"
+              << '\n';
+    std::cout << "Please insert again S and I" << '\n';
+    s = valid_s();
+    i = valid_i();
   }
-  return p_i;
+  std::cout << "Since (S + I) < (side*side) the epidemic starts" << '\n';
 }

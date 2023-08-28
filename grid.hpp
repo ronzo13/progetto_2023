@@ -21,6 +21,7 @@ class Grid {
   int count_s() const;
   int count_i() const;
   int count_r() const;
+  int count_voids() const;
 
   bool valid_coord(int, int) const;
 
