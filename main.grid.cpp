@@ -37,7 +37,9 @@ int main() {
         window.close();
       }
     }
+
     window.clear(sf::Color::Black);
+
     graphic_part.draw_grid(my_grid);
     window.display();
     sf::sleep(sf::seconds(1.5));
