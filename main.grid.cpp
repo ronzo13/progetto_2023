@@ -58,7 +58,7 @@ int main() {
       }
     }
 
-    window.clear(sf::Color::White);
+    window.clear(sf::Color::Black);
 
     graphic_part.draw_grid(my_grid);
     window.display();
@@ -70,7 +70,7 @@ int main() {
       assert(my_grid.count_r() <= new_grid.count_r());
       my_grid = new_grid;
 
-      window.clear(sf::Color::White);
+      window.clear(sf::Color::Black);
 
       // draw the updated grid
       graphic_part.draw_grid(new_grid);

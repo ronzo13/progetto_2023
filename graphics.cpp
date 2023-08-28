@@ -4,7 +4,7 @@
 
 #include "grid.hpp"
 
-Graph::Graph(sf::RenderWindow& window) : m_window{window} {};
+Graph::Graph(sf::RenderWindow& window) : m_window{window} {}
 
 void Graph::draw_grid(Grid const& grid) {
   int side = grid.get_side();

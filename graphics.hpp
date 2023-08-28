@@ -7,7 +7,7 @@
 
 class Graph {
  private:
-  sf::RenderWindow& m_window;  // perché & ?
+  sf::RenderWindow& m_window;
 
  public:
   Graph(sf::RenderWindow&);
