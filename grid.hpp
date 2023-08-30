@@ -15,20 +15,29 @@ class Grid {
 
   int get_side() const;
 
-  Cell& get_cell(int);  // ritorna referenza modificabile ad una cella
-  Cell const& get_cell(int) const;  // ritorna referenza costante a una cella
+  /* return a modifiable reference to a cell */
+  Cell& get_cell(int);
 
+  /* return a const reference to a cell */
+  Cell const& get_cell(int) const;
+
+  /* count how many cells there are for each condition */
   int count_s() const;
   int count_i() const;
   int count_r() const;
   int count_voids() const;
 
+  /* check if two numbers can be the coordinates for 
+  an element of the vector considering it a 2D grid */
   bool valid_coord(int, int) const;
 
+  /* fill the grid with a specified number of susceptibles and infected */
   void fill(int, int);
 
+  /* count the number of infected neighbors for the cell in the position i-th */
   int inf_neigh(int) const;
 
+  /* returns the grid with changed conditions of cells */
   Grid evolution(double, double);
 };
 

@@ -1,7 +1,7 @@
-#include <vector>
-
 #ifndef SIR_HPP
 #define SIR_HPP
+
+#include <vector>
 
 struct Param {
   double beta{};
@@ -27,6 +27,7 @@ class SIR {
 
   int get_total() const;
 
+  /* evolve the pandemic for the number of days inserted */
   std::vector<State> evolve(int days);
 };
 

@@ -7,11 +7,18 @@ class Cell {
  private:
   Condition m_condition;
 
- public:
+ public: 
+  /* create a cell giving it the Void condition by default*/
   Cell();
+
+  /* create a cell giving it a condition different from Void */
   Cell(Condition const&);
 
-  Condition get_condition() const;       // ritorna lo stato di una cella
+
+  /*return the condition of a cell*/
+  Condition get_condition() const;       
+
+  /*give a certain condition to a cell and return it*/
   Condition set_condition(Condition const&);  // assegna il nuovo stato a una cella
 };
 

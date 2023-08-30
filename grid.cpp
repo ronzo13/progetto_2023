@@ -8,17 +8,19 @@
 
 #include "cell.hpp"
 
+/* constructor */
 Grid::Grid(int side) : m_side{side}, m_cells(side * side) {}
 
+/* public methods */
 int Grid::get_side() const { return m_side; }
 
-Cell& Grid::get_cell(int cell_pos) {  // referenza modificabile a una cella
+Cell& Grid::get_cell(int cell_pos) {
   assert(cell_pos >= 0 && cell_pos < m_side * m_side);
   return m_cells[cell_pos];
 }
 
 Cell const& Grid::get_cell(
-    int cell_pos) const {  // referenza non modificabile a una cella
+    int cell_pos) const {
   assert(cell_pos >= 0 && cell_pos < m_side * m_side);
   return m_cells[cell_pos];
 }
@@ -90,16 +92,15 @@ int Grid::inf_neigh(int cell_pos) const {
   return count;
 }
 
-// crea e ritorna la griglia successiva
 Grid Grid::evolution(double beta, double gamma) {
   int const side = get_side();
   Grid next_grid{side};
 
-  // infection and removal rules
+  /* infection and removal rules */
   for (int j{}; j < side * side; ++j) {
-    Condition person = get_cell(j).get_condition();
+    Condition init_condition = get_cell(j).get_condition();
 
-    switch (person) {
+    switch (init_condition) {
       case Condition::Susceptible: {
         double const prob_infection = 1.0 - pow(1.0 - beta, inf_neigh(j));
         assert(prob_infection >= 0 && prob_infection <= 1);
@@ -127,6 +128,7 @@ Grid Grid::evolution(double beta, double gamma) {
   return next_grid;
 }
 
+/* global scope function */
 double random_value() {
   std::random_device rd;
   std::default_random_engine generator(rd());

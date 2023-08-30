@@ -1,10 +1,13 @@
 #include "cell.hpp"
 
+/* constructors */
 Cell::Cell()
-    : m_condition{Condition::Void} {};  // scelgo che di default una casella è vuota
+    : m_condition{Condition::Void} {}
 
 Cell::Cell(Condition const& init_condition) : m_condition{init_condition} {}
 
+
+/* public methods */
 Condition Cell::get_condition() const { return m_condition; }
 
 Condition Cell::set_condition(Condition const& new_condition) {
