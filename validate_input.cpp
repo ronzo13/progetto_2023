@@ -5,18 +5,11 @@
 
 #include "sir.hpp"
 
-/*se il primo if non funziona il programma riparte, continue indica che va
-avanti e riparte il while *il try catch serve a gestire principalmente
-l'inserimento di caratteri che non sono numeri se sei inseriscono numeri non
-consentiti il messaggio di errore parte ad opera dell'else, altrimenti se si
-inserisce un carattere il messaggio di errore parte ad opera del catch, sono
-quindi entrambi necessari*/
-
 double valid_beta() {
   bool valid_input{false};
   double beta{};
   while (!valid_input) {
-    std::cout << "beta: ";
+    std::cout << "Insert beta: ";
     std::string input;
     std::cin >> input;
     if (input.find(',') != std::string::npos) {
@@ -48,7 +41,7 @@ double valid_gamma() {
   bool valid_input{false};
   double gamma{};
   while (!valid_input) {
-    std::cout << "gamma: ";
+    std::cout << "Insert gamma: ";
     std::string input;
     std::cin >> input;
     if (input.find(',') != std::string::npos) {
@@ -77,11 +70,11 @@ double valid_gamma() {
 }
 
 /*the function checks that R0 = beta/gamma
- *is greater than 1 fot the epidemic to
+ *is greater than 1 for the epidemic to
  * start*/
 void valid_R0(double& beta, double& gamma) {
   while (beta <= gamma) {
-    std::cout << "Since beta < gamma the R0 index is less than 1" << '\n';
+    std::cout << "Since beta < gamma, R0 <= 1" << '\n';
     std::cout << "Please insert beta greater than gamma" << '\n';
     beta = valid_beta();
     gamma = valid_gamma();
@@ -93,17 +86,17 @@ int valid_s() {
   bool valid_input{false};
   int new_s{};
   while (!valid_input) {
-    std::cout << "s: ";
+    std::cout << "Insert susceptibles: ";
     std::string input;
     std::cin >> input;
     if (input.find(',') != std::string::npos) {
       std::cout << "Invalid value for beta. Please use a dot (.) as the "
                    "decimal separator."
                 << '\n';
-      continue;  // Ask for input again
+      continue;  /* Ask for input again */
     }
     try {
-      // qui avviene il troncamento se uso stoi() o dichiato int
+      // qui avviene il troncamento se uso stoi() o dichiaro int
       double check_s = std::stod(input);
       if (check_s == static_cast<int>(check_s) && check_s >= 0) {
         new_s = static_cast<int>(check_s);
@@ -123,7 +116,7 @@ int valid_i() {
   bool valid_input{false};
   int new_i{};
   while (!valid_input) {
-    std::cout << "i: ";
+    std::cout << "Insert infected: ";
     std::string input;
     std::cin >> input;
     if (input.find(',') != std::string::npos) {
@@ -152,7 +145,7 @@ int valid_r() {
   bool valid_input{false};
   int new_r{};
   while (!valid_input) {
-    std::cout << "r: ";
+    std::cout << "Insert removed: ";
     std::string input;
     std::cin >> input;
     if (input.find(',') != std::string::npos) {
@@ -181,7 +174,7 @@ int valid_days() {
   bool valid_input{false};
   int new_days{};
   while (!valid_input) {
-    std::cout << "epidemic duration : ";
+    std::cout << "Insert epidemic duration in days: ";
     std::string input;
     std::cin >> input;
     if (input.find(',') != std::string::npos) {
@@ -214,7 +207,7 @@ int valid_side() {
   bool valid_input{false};
   int new_side{};
   while (!valid_input) {
-    std::cout << "grid side: ";
+    std::cout << "Insert grid side: ";
     std::string input;
     std::cin >> input;
     if (input.find(',') != std::string::npos) {
@@ -250,5 +243,5 @@ void valid_SIR(int& s, int& i, int side) {
     s = valid_s();
     i = valid_i();
   }
-  std::cout << "Since (S + I) < (side*side) the epidemic starts" << '\n';
+  std::cout << "Since (S + I) <= (side*side) the epidemic starts" << '\n';
 }

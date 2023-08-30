@@ -9,10 +9,14 @@ State::State(int n_s, int n_i, int n_r)
       i{static_cast<double>(n_i)},
       r{static_cast<double>(n_r)} {}
 
+
+/* SIR constructor */
 SIR::SIR(State const& state, Param const& par) : m_state{state}, m_par{par} {
   m_total = static_cast<int>(m_state.s + m_state.i + m_state.r);
 }
 
+
+/* public methods */
 int SIR::get_total() const { return m_total; }
 
 std::vector<State> SIR::evolve(int days) {
@@ -21,7 +25,8 @@ std::vector<State> SIR::evolve(int days) {
   int const N = get_total();
 
   for (int y{}; y < days; ++y) {
-    State const& prev_st = v_evo.back();  // referenza all'ultimo elemento
+    /* reference to the last element */
+    State const& prev_st = v_evo.back();
 
     m_state.s = prev_st.s - m_par.beta * (prev_st.s / N) * prev_st.i;
 
@@ -57,7 +62,8 @@ std::vector<State> SIR::evolve(int days) {
     if (m_state == prev_st) {
       break;
     } else {
-      v_evo.push_back(m_state);  // aggiunge il nuovo stato in fondo al vector
+      /* add the new state at the end of the vector */
+      v_evo.push_back(m_state);
     }
   }
 

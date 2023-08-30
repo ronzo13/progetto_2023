@@ -4,7 +4,7 @@
 
 #include "doctest.h"
 
-TEST_CASE("Testing basics") {
+TEST_CASE("Testing methods of the Cell class") {
   SUBCASE("Testing the get_condition function") {
     Cell a;
     Cell b(Condition::Removed);
@@ -13,15 +13,18 @@ TEST_CASE("Testing basics") {
     CHECK(b.get_condition() == Condition::Removed);
   }
 
-  SUBCASE("testing the set_condition function") {
+  SUBCASE("Testing the set_condition function") {
     Cell a, b;
     a.set_condition(Condition::Susceptible);
     b.set_condition(Condition::Infected);
     CHECK(a.get_condition() == Condition::Susceptible);
     CHECK(b.get_condition() == Condition::Infected);
     CHECK(a.get_condition() != b.get_condition());
-  }
+  }  
+}
 
+/*Testing mehods of the Grid class*/
+TEST_CASE("Testing basics"){
   SUBCASE("Testing the get_side function") {
     Grid grid(4);
     CHECK(grid.get_side() == 4);
@@ -59,29 +62,31 @@ TEST_CASE("Testing basics") {
     CHECK(cell.get_condition() == Condition::Void);
   }
 
-  SUBCASE("Testing the count_s/i/r functions") {
-    Grid grid(10);
+  SUBCASE("Testing the count_s/i/r/voids functions") {
+    int side{10};
+    Grid grid{side};
     grid.fill(90, 8);
-
-    int side = grid.get_side();
+    
     int S = grid.count_s();
     int I = grid.count_i();
-    // int R = grid.count_r();
-    int voids = (side * side) - (S + I);
+    int R = grid.count_r();
+    int voids = grid.count_voids();
 
     CHECK(S == 90);
     CHECK(I == 8);
+    CHECK(R == 0);
     CHECK(voids == 2);
   }
 
   SUBCASE("Testing the inf_neigh function") {
-    Grid grid(5);
+    int side{5};
+    Grid grid{side};
 
     grid.get_cell(1).set_condition(Condition::Infected);
     grid.get_cell(2).set_condition(Condition::Susceptible);
     grid.get_cell(5).set_condition(Condition::Infected);
     grid.get_cell(6).set_condition(Condition::Infected);
-    // m_cells[0] and m_cells[7] should be Void by default
+    /* m_cells[0] and m_cells[7] should be Void by default */
 
     CHECK(grid.inf_neigh(0) == 3);
     CHECK(grid.inf_neigh(1) == 2);
@@ -94,12 +99,11 @@ TEST_CASE("Testing the fill function") {
     Grid grid{side};
     int s{80}, i{20};
     grid.fill(s, i);
-    int voids =
-        side * side - (grid.count_s() + grid.count_i() + grid.count_r());
+    
     CHECK(grid.count_s() == s);
     CHECK(grid.count_i() == i);
     CHECK(grid.count_r() == 0);
-    CHECK(voids == 0);
+    CHECK(grid.count_voids() == 0);
   }
 
   SUBCASE("#2") {
@@ -107,18 +111,19 @@ TEST_CASE("Testing the fill function") {
     Grid grid{side};
     int s{80}, i{20};
     grid.fill(s, i);
-    int voids =
-        side * side - (grid.count_s() + grid.count_i() + grid.count_r());
+    
     CHECK(grid.count_s() == s);
     CHECK(grid.count_i() == i);
     CHECK(grid.count_r() == 0);
-    CHECK(voids == 300);
+    CHECK(grid.count_voids() == 300);
   }
 }
 
-TEST_CASE("Testing the evolution function") {
+
+TEST_CASE("Decrease of susceptibles and increase of removed after calling evolution function") {
   SUBCASE("After 1 day") {
-    Grid grid{12};
+    int side{12};
+    Grid grid{side};
     grid.fill(90, 4);
     double beta{0.3}, gamma{0.2};
     auto new_grid = grid.evolution(beta, gamma);
@@ -129,7 +134,8 @@ TEST_CASE("Testing the evolution function") {
 
   SUBCASE("After 10 days") {
     int days{10};
-    Grid grid{10};
+    int side{10};
+    Grid grid{side};
     grid.fill(75, 5);
     double beta{0.5}, gamma{0.3};
     auto first_grid = grid;
