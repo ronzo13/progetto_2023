@@ -29,6 +29,33 @@ int main() {
   // Initialize SFML
   sf::RenderWindow window(sf::VideoMode(800, 600), "Epidemic Simulation");
   Graph graphic_part(window);
+  sf::Clock clock;
+
+  if (window.isOpen()) {
+    for (int i{}; i < days; ++i) {
+      Grid new_grid = my_grid.evolution(beta, gamma);
+      my_grid = new_grid;
+      window.clear(sf::Color::Black);
+      // draw the updated grid
+      graphic_part.draw_grid(my_grid);
+      window.display();
+
+      std::cout << "day: " << i + 1 << '\n';
+      std::cout << "Number of S: " << new_grid.count_s() << '\n';
+      std::cout << "Number of I: " << new_grid.count_i() << '\n';
+      std::cout << "Number of R: " << new_grid.count_r() << '\n';
+      std::cout << "Number of Void: " << new_grid.count_voids() << '\n';
+
+      while (clock.getElapsedTime().asSeconds() < 2.0) {
+        /*wait for 2 seconds*/
+      }
+      clock.restart();
+
+      if (new_grid.count_i() == 0) {
+        break;
+      }
+    }
+  }
 
   while (window.isOpen()) {
     sf::Event event;
@@ -36,30 +63,6 @@ int main() {
       if (event.type == sf::Event::Closed) {
         window.close();
       }
-    }
-
-    window.clear(sf::Color::Black);
-
-    graphic_part.draw_grid(my_grid);
-    window.display();
-    sf::sleep(sf::seconds(1.5));
-
-    for (int i{}; i < days; ++i) {
-      Grid new_grid = my_grid.evolution(beta, gamma);
-      my_grid = new_grid;
-
-      window.clear(sf::Color::Black);
-
-      // draw the updated grid
-      graphic_part.draw_grid(new_grid);
-      window.display();
-      sf::sleep(sf::seconds(1.5));
-
-      std::cout << "day: " << i + 1 << '\n';
-      std::cout << "Number of S: " << new_grid.count_s() << '\n';
-      std::cout << "Number of I: " << new_grid.count_i() << '\n';
-      std::cout << "Number of R: " << new_grid.count_r() << '\n';
-      std::cout << "Number of Void: " << new_grid.count_voids() << '\n';
     }
   }
 }
