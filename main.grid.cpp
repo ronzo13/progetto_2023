@@ -58,7 +58,7 @@ int main() {
       clock.restart();
 
       if (new_grid.count_i() == 0) {
-        std::cout << "Since there are no more infected the epidemic stops."
+        std::cout << "Since there are no more infectious the epidemic stops."
                   << '\n';
         break;
       }
