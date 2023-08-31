@@ -10,7 +10,7 @@ int main() {
   int side = valid_side();
   Grid my_grid{side};
   std::cout << "The grid has a total of " << side * side << " cells." << '\n';
-  std::cout << "Therefore is the maximum number of people you can insert."
+  std::cout << "Therefore this is the maximum number of people you can insert."
             << '\n';
 
   /* the sum of suscpetibles and infected cannot
