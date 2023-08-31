@@ -19,7 +19,7 @@ int main() {
   int days = valid_days();
 
   std::cout << "total: " << sir.get_total() << '\n';
-  std::cout << "------" << '\n';
+  std::cout << "--------" << '\n';
 
   std::vector<State> epidemic = sir.evolve(days);
 
@@ -31,7 +31,7 @@ int main() {
     std::cout << "i: " << _sir.i << '\n';
     std::cout << "r: " << _sir.r << '\n';
     std::cout << "total: " << _sir.s + _sir.i + _sir.r << '\n';
-    std::cout << "------" << '\n';
+    std::cout << "--------" << '\n';
 
     if (day < size) {
       ++day;

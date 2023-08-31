@@ -74,12 +74,12 @@ double valid_gamma() {
  * start*/
 void valid_R0(double& beta, double& gamma) {
   while (beta <= gamma) {
-    std::cout << "Since beta < gamma, R0 <= 1" << '\n';
-    std::cout << "Please insert beta greater than gamma" << '\n';
+    std::cout << "Since beta < gamma, R0 <= 1." << '\n';
+    std::cout << "Please insert beta greater than gamma." << '\n';
     beta = valid_beta();
     gamma = valid_gamma();
   }
-  std::cout << "Since beta > gamma, R0 > 1, the epidemic starts" << '\n';
+  std::cout << "Since beta > gamma, R0 > 1, the epidemic starts." << '\n';
 }
 
 int valid_s() {
@@ -93,10 +93,9 @@ int valid_s() {
       std::cout << "Invalid value for beta. Please use a dot (.) as the "
                    "decimal separator."
                 << '\n';
-      continue;  /* Ask for input again */
+      continue;
     }
     try {
-      // qui avviene il troncamento se uso stoi() o dichiaro int
       double check_s = std::stod(input);
       if (check_s == static_cast<int>(check_s) && check_s >= 0) {
         new_s = static_cast<int>(check_s);
@@ -116,7 +115,7 @@ int valid_i() {
   bool valid_input{false};
   int new_i{};
   while (!valid_input) {
-    std::cout << "Insert infected: ";
+    std::cout << "Insert infectious: ";
     std::string input;
     std::cin >> input;
     if (input.find(',') != std::string::npos) {
@@ -237,11 +236,11 @@ int valid_side() {
 
 void valid_SIR(int& s, int& i, int side) {
   while ((side * side) < (s + i)) {
-    std::cout << "Since (S + I) > (side*side) the grid cannot be filled"
+    std::cout << "Since (S + I) > (side * side) the grid cannot be filled."
               << '\n';
-    std::cout << "Please insert again S and I" << '\n';
+    std::cout << "Please insert again S and I." << '\n';
     s = valid_s();
     i = valid_i();
   }
-  std::cout << "Since (S + I) <= (side*side) the epidemic starts" << '\n';
+  std::cout << "Since (S + I) <= (side * side) the epidemic starts." << '\n';
 }
