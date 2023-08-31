@@ -9,7 +9,7 @@ Both "sir" and "grid" get inputs from the PowerShell.
 
 # Required Packages
 
-The "grid" simulation requires the SFML external library in order to dispaly the epidemic's evolution in the grid.
+The "grid" simulation requires the [SFML](https://www.sfml-dev.org/) external library in order to dispaly the epidemic's evolution in the grid.
 It is possible to install SFML on Linux directly from your distribution's package repository.
 For instance:
 
