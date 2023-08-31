@@ -26,14 +26,16 @@ add_executable(grid main.grid.cpp sir.cpp grid.cpp cell.cpp validate_input.cpp g
 target_link_libraries(grid PRIVATE sfml-graphics)
 
 # se il testing e' abilitato...
-#   per disabilitare il testing, passare -DBUILD_TESTING=OFF a cmake durante la fase di configurazione
+# per disabilitare il testing, passare -DBUILD_TESTING=OFF a cmake durante la fase di configurazione
 if (BUILD_TESTING)
 
-  # aggiungi l'eseguibile statistics.t
+  # aggiungi l'eseguibile sir.t
   add_executable(sir.t sir.test.cpp sir.cpp)
-  # aggiungi l'eseguibile statistics.t alla lista dei test
+  # aggiungi l'eseguibile sir.t alla lista dei test
   add_test(NAME sir.t COMMAND sir.t)
+  # aggiungi l'eseguibile grid.t
   add_executable(grid.t grid.test.cpp grid.cpp cell.cpp)
+  # aggiungi l'eseguibile grid.t alla lista dei test
   add_test(NAME grid.t COMMAND grid.t)
 endif()
 

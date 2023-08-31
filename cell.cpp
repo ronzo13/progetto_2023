@@ -1,11 +1,9 @@
 #include "cell.hpp"
 
 /* constructors */
-Cell::Cell()
-    : m_condition{Condition::Void} {}
+Cell::Cell() : m_condition{Condition::Void} {}
 
 Cell::Cell(Condition const& init_condition) : m_condition{init_condition} {}
-
 
 /* public methods */
 Condition Cell::get_condition() const { return m_condition; }

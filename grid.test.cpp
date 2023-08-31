@@ -16,15 +16,15 @@ TEST_CASE("Testing methods of the Cell class") {
   SUBCASE("Testing the set_condition function") {
     Cell a, b;
     a.set_condition(Condition::Susceptible);
-    b.set_condition(Condition::Infected);
+    b.set_condition(Condition::Infectious);
     CHECK(a.get_condition() == Condition::Susceptible);
-    CHECK(b.get_condition() == Condition::Infected);
+    CHECK(b.get_condition() == Condition::Infectious);
     CHECK(a.get_condition() != b.get_condition());
-  }  
+  }
 }
 
 /*Testing mehods of the Grid class*/
-TEST_CASE("Testing basics"){
+TEST_CASE("Testing basics") {
   SUBCASE("Testing the get_side function") {
     Grid grid(4);
     CHECK(grid.get_side() == 4);
@@ -66,7 +66,7 @@ TEST_CASE("Testing basics"){
     int side{10};
     Grid grid{side};
     grid.fill(90, 8);
-    
+
     int S = grid.count_s();
     int I = grid.count_i();
     int R = grid.count_r();
@@ -82,10 +82,10 @@ TEST_CASE("Testing basics"){
     int side{5};
     Grid grid{side};
 
-    grid.get_cell(1).set_condition(Condition::Infected);
+    grid.get_cell(1).set_condition(Condition::Infectious);
     grid.get_cell(2).set_condition(Condition::Susceptible);
-    grid.get_cell(5).set_condition(Condition::Infected);
-    grid.get_cell(6).set_condition(Condition::Infected);
+    grid.get_cell(5).set_condition(Condition::Infectious);
+    grid.get_cell(6).set_condition(Condition::Infectious);
     /* m_cells[0] and m_cells[7] should be Void by default */
 
     CHECK(grid.inf_neigh(0) == 3);
@@ -99,7 +99,7 @@ TEST_CASE("Testing the fill function") {
     Grid grid{side};
     int s{80}, i{20};
     grid.fill(s, i);
-    
+
     CHECK(grid.count_s() == s);
     CHECK(grid.count_i() == i);
     CHECK(grid.count_r() == 0);
@@ -111,7 +111,7 @@ TEST_CASE("Testing the fill function") {
     Grid grid{side};
     int s{80}, i{20};
     grid.fill(s, i);
-    
+
     CHECK(grid.count_s() == s);
     CHECK(grid.count_i() == i);
     CHECK(grid.count_r() == 0);
@@ -119,8 +119,9 @@ TEST_CASE("Testing the fill function") {
   }
 }
 
-
-TEST_CASE("Decrease of susceptibles and increase of removed after calling evolution function") {
+TEST_CASE(
+    "Decrease of susceptibles and increase of removed after calling evolution "
+    "function") {
   SUBCASE("After 1 day") {
     int side{12};
     Grid grid{side};

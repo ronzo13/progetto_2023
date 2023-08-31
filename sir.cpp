@@ -9,12 +9,10 @@ State::State(int n_s, int n_i, int n_r)
       i{static_cast<double>(n_i)},
       r{static_cast<double>(n_r)} {}
 
-
 /* SIR constructor */
 SIR::SIR(State const& state, Param const& par) : m_state{state}, m_par{par} {
   m_total = static_cast<int>(m_state.s + m_state.i + m_state.r);
 }
-
 
 /* public methods */
 int SIR::get_total() const { return m_total; }

@@ -27,7 +27,7 @@ class Grid {
   int count_r() const;
   int count_voids() const;
 
-  /* check if two numbers can be the coordinates for 
+  /* check if two numbers can be the coordinates for
   an element of the vector considering it a 2D grid */
   bool valid_coord(int, int) const;
 

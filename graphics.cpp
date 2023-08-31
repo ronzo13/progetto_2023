@@ -26,7 +26,7 @@ void Graph::draw_grid(Grid const& grid) {
         case Condition::Susceptible: {
           cell.setFillColor(sf::Color::Green);
         } break;
-        case Condition::Infected: {
+        case Condition::Infectious: {
           cell.setFillColor(sf::Color::Red);
         } break;
         case Condition::Removed: {
