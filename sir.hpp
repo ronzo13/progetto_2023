@@ -28,7 +28,7 @@ class SIR {
   int get_total() const;
 
   /* evolve the pandemic for the number of days inserted */
-  std::vector<State> evolve(int days);
+  std::vector<State> evolve(int);
 };
 
 bool operator==(State const&, State const&);
