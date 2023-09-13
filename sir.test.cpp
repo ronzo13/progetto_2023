@@ -86,7 +86,7 @@ TEST_CASE("Testing the class handling the evolution of a sir status") {
   }
 }
 
-TEST_CASE("Testing the 's = -1' parameters") {
+TEST_CASE("Testing s, i, r do not become negative") {
   Param param{0.3, 0.03};
   State state{1000, 10, 1};
   SIR sir{state, param};
