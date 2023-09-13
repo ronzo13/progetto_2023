@@ -1,6 +1,7 @@
 #include "validate_input.hpp"
 
 #include <iostream>
+#include <stdexcept>
 #include <string>
 
 #include "sir.hpp"

@@ -4,6 +4,7 @@
 #include <cassert>
 #include <cmath>
 #include <iostream>
+#include <numeric>
 #include <random>
 
 #include "cell.hpp"
@@ -102,7 +103,7 @@ Grid Grid::evolution(double beta, double gamma) {
 
     switch (init_condition) {
       case Condition::Susceptible: {
-        double const prob_infection = 1.0 - pow(1.0 - beta, inf_neigh(j));
+        double const prob_infection = 1.0 - std::pow(1.0 - beta, inf_neigh(j));
         assert(prob_infection >= 0 && prob_infection <= 1);
         if (random_value() < prob_infection) {
           next_grid.get_cell(j).set_condition(Condition::Infectious);
