@@ -85,3 +85,17 @@ TEST_CASE("Testing the class handling the evolution of a sir status") {
     CHECK(sir.get_total() == (_sir.s + _sir.i + _sir.r));
   }
 }
+
+TEST_CASE("Testing the 's = -1' parameters") {
+  Param param{0.3, 0.03};
+  State state{1000, 10, 1};
+  SIR sir{state, param};
+  int days{1000};
+  std::vector<State> epidemic = sir.evolve(days);
+
+  for (auto const& _sir : epidemic) {
+    CHECK(_sir.s >= 0);
+    CHECK(_sir.i >= 0);
+    CHECK(_sir.r >= 0);
+  }
+}
